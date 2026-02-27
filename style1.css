@@ -1,0 +1,288 @@
+/* Reset dan Dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    /* Gradien sedikit diperdalam (biru-ungu pastel) agar efek kaca terlihat tembus pandang */
+    background: linear-gradient(135deg, #d4dff5 0%, #e6d8f5 100%);
+    color: #333333;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-attachment: fixed; 
+}
+
+/* --- KELAS UTAMA UNTUK EFEK GLASS --- */
+.glass-effect {
+    /* Opacity putih dikurangi dari 0.7 ke 0.4 agar lebih tembus pandang */
+    background: rgba(255, 255, 255, 0.4); 
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-effect:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12); 
+}
+
+/* Navigasi Minimalis (Juga diberi sedikit efek glass) */
+.navbar {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.3rem;
+    /* Menggunakan warna aksen teal tua */
+    color: #005f73; 
+    letter-spacing: -0.5px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #555;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+/* Aksen warna saat hover */
+.nav-links a:hover, .nav-links a.active {
+    color: #005f73; /* Warna aksen */
+}
+
+/* Kontainer Utama */
+.container {
+    max-width: 800px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+    flex: 1;
+}
+
+/* Bagian CV / Header */
+/* Menambahkan class glass-effect di sini */
+.cv-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 2.5rem;
+    border-radius: 20px; /* Radius lebih tumpul agar terlihat modern */
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    /* Memberi border putih di sekeliling foto agar kontras dengan kaca */
+    border: 4px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.profile-info h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 0.2rem;
+    letter-spacing: -0.5px;
+}
+
+.role {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #005f73; /* Warna aksen pada role */
+    margin-bottom: 1.2rem;
+}
+
+/* Keahlian (Skills Badges) */
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.skill-badge {
+    /* Badge dibuat sedikit transparan juga */
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 95, 115, 0.2);
+    color: #005f73;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.skill-badge:hover {
+    background-color: #005f73;
+    color: white;
+    border-color: #005f73;
+}
+
+/* Quotes Section */
+.quotes-section {
+    margin-top: 3rem;
+    text-align: center;
+}
+
+/* Menambahkan class glass-effect di sini */
+.quote-box {
+    padding: 2.5rem;
+    border-radius: 16px;
+    /* Mengganti border kiri hitam menjadi warna aksen */
+    border-left: 4px solid #005f73;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.typing-container {
+    font-size: 1.1rem;
+    color: #444;
+    min-height: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.delay-text {
+    font-style: italic;
+    color: #666;
+    font-weight: 400;
+}
+
+/* Tombol Aksi */
+.action-btn {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    /* Menggunakan warna aksen, bukan hitam */
+    background: linear-gradient(135deg, #005f73 0%, #0a9396 100%);
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0, 95, 115, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 95, 115, 0.4);
+}
+
+/* Footer Minimalis */
+.footer {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    margin-top: auto;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.social-btn {
+    text-decoration: none;
+    color: #666;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.social-btn:hover {
+    color: #005f73;
+}
+
+.footer p {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* ========================================= */
+/* ANIMASI HALUS               */
+/* ========================================= */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px); /* Jarak muncul lebih jauh */
+    animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.delay-1 { animation-delay: 0.3s; }
+.delay-2 { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================= */
+/* RESPONSIVE                  */
+/* ========================================= */
+@media (max-width: 768px) {
+    .cv-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem;
+    }
+    
+    .profile-img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .skills-container {
+        justify-content: center;
+    }
+
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .quote-box {
+        padding: 1.5rem;
+    }
+}

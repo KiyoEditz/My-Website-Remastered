@@ -1,0 +1,75 @@
+/* ========================================= */
+/* CSS KHUSUS UNTUK HALAMAN TALENT/STATS     */
+/* ========================================= */
+
+.talent-section {
+    text-align: center;
+    padding-top: 1rem;
+}
+
+.section-title {
+    font-size: 2rem;
+    color: #111;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    color: #666;
+    margin-bottom: 2.5rem;
+    font-size: 1rem;
+}
+
+/* --- Grid System untuk Widget --- */
+.stats-grid {
+    display: grid;
+    /* Grid otomatis: Card minimal selebar 300px, maksimal mengisi sisa ruang */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    align-items: center; /* Memusatkan konten secara vertikal */
+}
+
+/* --- Container untuk masing-masing API --- */
+.stat-card {
+    padding: 1.5rem;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Mencegah gambar meluber keluar kotak */
+}
+
+/* Mengatur agar Trophies (atau gambar panjang) membentang penuh di layar lebar */
+.stat-full-width {
+    grid-column: 1 / -1; 
+}
+
+/* --- Styling Gambar API --- */
+.stat-card a {
+    display: block;
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.stat-card img {
+    max-width: 100%; /* Memastikan gambar tidak lebih lebar dari kontainer */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Efek sedikit membesar saat gambar disorot kursor */
+.stat-card a:hover {
+    transform: scale(1.03);
+}
+
+/* --- Responsive untuk Layar HP --- */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr; /* 1 kolom penuh di layar kecil */
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="thumbnail.jpg?v=2" sizes="32x32" type="image/png">
+    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="music.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Music | Abi Andriansyah</title>
+</head>
+<body>
+    
+    <div class="background-blur" id="backgroundBlur"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <span class="logo">KiyoEditz.</span>
+            <ul class="nav-links">
+                <li><a href="index1.html">Profile</a></li>
+                <li><a href="galeri.html">Galeri</a></li>
+                <li><a href="music.html" class="active">Music</a></li>
+                <li><a href="talent.html">Talent</a></li>
+                <li><a href="contact.html">Contact</a></li>   
+            </ul>
+        </div>
+    </nav>
+
+    <div class="welcome-panel" id="welcomePanel">
+        <div class="welcome-content glass-effect">
+            <i class="fas fa-headphones-alt" style="font-size: 3rem; color: #005f73; margin-bottom: 1rem;"></i>
+            <h2>Siap Mendengarkan?</h2>
+            <p>Gunakan headphone untuk pengalaman terbaik.</p>
+            <button id="startButton" class="action-btn">Mulai Putar</button>
+        </div>
+    </div>
+
+    <main class="container">
+        <section class="player-container glass-effect fade-in">
+            
+            <div class="player-header">
+                <h1 id="playlistTitle" class="section-title">Playlist</h1>
+                <div class="playlist-selector">
+                    <select id="playlistSelect" class="glass-select"></select>
+                </div>
+            </div>
+
+            <div class="player-layout">
+                <div class="album-art-wrapper">
+                    <img id="albumArt" src="thumbnail.jpg" alt="Album Art">
+                </div>
+                
+                <div class="player-controls-wrapper">
+                    
+                    <div class="player-info">
+                        <h2 id="songTitle">Memuat Lagu...</h2>
+                        <p id="artist">Menunggu aksi pengguna</p>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <span id="currentTime">0:00</span>
+                        <input type="range" id="progressBar" min="0" max="100" value="0">
+                        <span id="duration">0:00</span>
+                    </div>
+                    
+                    <div class="volume-container">
+                        <i class="fas fa-volume-up"></i>
+                        <input type="range" id="volumeBar" min="0" max="100" value="30">
+                    </div>
+                    
+                    <div class="volume-container">
+                        <i class="fas fa-volume-up"></i>
+                        <input type="range" id="volumeBar" min="0" max="100" value="30">
+                    </div>
+                    
+                    <div class="lyrics-container">
+                        <div class="lyrics-scroll">
+                            <p id="currentLyric" class="active-lyric">Lirik akan muncul di sini</p>
+                            <p id="nextLyric" class="upcoming-lyric"></p>
+                            <p id="futureLyric" class="upcoming-lyric"></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <audio id="audio"></audio>
+    
+    <script src="script.js"></script>
+</body>
+</html>

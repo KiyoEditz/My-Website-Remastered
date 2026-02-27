@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="thumbnail.jpg?v=2" sizes="32x32" type="image/png">
+    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="galeri.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Galeri | Abi Andriansyah</title>
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="nav-container">
+            <span class="logo">KiyoEditz.</span>
+            <ul class="nav-links">
+                <li><a href="index1.html">Profile</a></li>
+                <li><a href="galeri.html" class="active">Galeri</a></li>
+                <li><a href="music.html">Music</a></li>
+                <li><a href="talent.html">Talent</a></li>
+                <li><a href="contact.html">Contact</a></li>   
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="gallery-section glass-effect fade-in">
+            <h1 class="section-title">Koleksi Momen</h1>
+            <p class="section-subtitle">Beberapa kenangan dan gambar pilihan.</p>
+
+            <div class="carousel">
+                <button class="carousel-btn prev">‹</button>
+                <div class="carousel-container">
+                    <div class="carousel-track">
+
+                        <div class="carousel-slide">
+                            <img src="112567330_p0_master1200.jpg" alt="Foto 1" class="carousel-image">
+                            <div class="carousel-caption">
+                                <h3>Karya Pertama</h3>
+                                <p>Ini adalah deskripsi singkat untuk gambar pertama.</p>
+                            </div>
+                        </div>
+
+                        <div class="carousel-slide">
+                            <img src="117817334_p0.png" alt="Foto 2" class="carousel-image">
+                            <div class="carousel-caption">
+                                <h3>Eksplorasi Warna</h3>
+                                <p>Deskripsi untuk gambar kedua, mungkin dengan cerita yang berbeda.</p>
+                            </div>
+                        </div>
+
+                        <div class="carousel-slide">
+                            <img src="SaveTwitter.Net_GWdaryUbUAAmdAN.jpg" alt="Foto 3" class="carousel-image">
+                            <div class="carousel-caption">
+                                <h3>Momen Spesial</h3>
+                                <p>Teks unik untuk gambar yang ketiga.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="carousel-slide">
+                            <img src="1cf07134674f4f54c3883.jpg" alt="Foto 4" class="carousel-image">
+                            <div class="carousel-caption">
+                                <h3>Penutup Cerita</h3>
+                                <p>Dan ini adalah deskripsi terakhir.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <button class="carousel-btn next">›</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer fade-in delay-1">
+        <div class="social-links">
+            <a href="https://www.instagram.com/kiyoeditz" class="social-btn">Instagram</a>
+            <a href="https://www.facebook.com/profile.php?id=100077102250480&mibextid=ZbWKwL" class="social-btn">Facebook</a>
+            <a href="https://discord.com/users/813365850979041302" class="social-btn">Discord</a>
+        </div>
+        <p>© 2026 KiyoTech Corp. All Rights Reserved.</p>
+    </footer>
+
+    <script> 
+        const track = document.querySelector('.carousel-track');
+        const prevBtn = document.querySelector('.carousel-btn.prev');
+        const nextBtn = document.querySelector('.carousel-btn.next');
+        const slides = Array.from(track.children);
+        
+        let slideWidth = slides[0].getBoundingClientRect().width;
+        let currentIndex = 0;
+
+        const updateCarouselDimensions = () => {
+            track.style.transition = 'none';
+            slideWidth = slides[0].getBoundingClientRect().width;
+            track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+
+            setTimeout(() => {
+                track.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)'; // Transisi lebih mulus
+            }, 50);
+        };
+
+        window.addEventListener('resize', updateCarouselDimensions);
+        // Panggil setelah gambar selesai dimuat agar ukurannya presisi
+        window.addEventListener('load', updateCarouselDimensions); 
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < slides.length - 1) {
+                currentIndex++;
+                track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="thumbnail.jpg?v=2" sizes="32x32" type="image/png">
+    <link rel="stylesheet" href="style1.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Profil | Abi Andriansyah</title>
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="nav-container">
+            <span class="logo">KiyoEditz.</span>
+            <ul class="nav-links">
+                <li><a href="index1.html" class="active">Profile</a></li>
+                <li><a href="galeri.html">Galeri</a></li>
+                <li><a href="music.html">Music</a></li>
+                <li><a href="talent.html">Talent</a></li>
+                <li><a href="contact.html">Contact</a></li>   
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="cv-header glass-effect fade-in">
+            <img src="thumbnail.jpg" alt="Foto Profil Abia" class="profile-img">
+            <div class="profile-info">
+                <h1>Abi Andriansyah</h1>
+                <h2 class="role">Web Development & Machine Learning Enthusiast</h2>
+                
+                <div class="skills-container">
+                    <span class="skill-badge">JavaScript</span>
+                    <span class="skill-badge">Python</span>
+                    <span class="skill-badge">Node.js</span>
+                    <span class="skill-badge">AI / ML</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="quotes-section fade-in delay-1">
+            <div class="quote-box glass-effect">
+                <p class="typing-container"><span id="typing-text"></span></p>
+                <p class="typing-container delay-text"><span id="typing-text2"></span></p>
+            </div>
+            <a href="https://youtube.com/@kiyo_editz?si=ZFzdmehe8snTEIBn" class="action-btn">Subscribe YouTube</a>
+        </section>
+    </main>
+
+    <footer class="footer fade-in delay-2">
+        <div class="social-links">
+            <a href="https://www.instagram.com/kiyoeditz" class="social-btn">Instagram</a>
+            <a href="https://www.facebook.com/profile.php?id=100077102250480&mibextid=ZbWKwL" class="social-btn">Facebook</a>
+            <a href="https://discord.com/users/813365850979041302" class="social-btn">Discord</a>
+        </div>
+        <p>© 2026 KiyoTech Corp. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Memperbaiki tata bahasa tanpa mengubah makna asli
+        const text = "Teruslah merasa haus akan ilmu pengetahuan, karena ia jauh lebih bermanfaat daripada sekadar gengsi dan hawa nafsu.";
+        const text2 = "\"Ketika saya menulis kode ini, hanya Tuhan dan saya yang mengerti. Sekarang, hanya Tuhan yang tahu.\"";
+        const typingSpeed = 40; 
+
+        let index1 = 0; 
+        let index2 = 0; 
+
+        function typeEffect1() {
+            const typingElement = document.getElementById("typing-text");
+            if (index1 < text.length) {
+                typingElement.textContent += text.charAt(index1);
+                index1++;
+                setTimeout(typeEffect1, typingSpeed);
+            } else {
+                setTimeout(typeEffect2, 500); // Jeda sejenak sebelum teks kedua
+            }
+        }
+
+        function typeEffect2() {
+            const typingElement = document.getElementById("typing-text2");
+            if (index2 < text2.length) {
+                typingElement.textContent += text2.charAt(index2);
+                index2++;
+                setTimeout(typeEffect2, typingSpeed);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(typeEffect1, 800); // Mulai setelah animasi fade-in selesai
+        });
+
+        // Script Prank tetap dipertahankan
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('prank')) {
+                alert('no, you have to stay here lol.');
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        };
+    </script>
+</body>
+</html>
