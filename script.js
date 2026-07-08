@@ -14,14 +14,21 @@ class MusicPlayer {
         this.currentLyric = document.getElementById('currentLyric');
         this.nextLyric = document.getElementById('nextLyric');
         this.futureLyric = document.getElementById('futureLyric');
-        this.playlistSelect = document.getElementById('playlistSelect'); // Tambahkan ini
+        this.playlistSelect = document.getElementById('playlistSelect');
 
         this.currentSongIndex = 0;
         this.isPlaying = false;
-        this.allPlaylists = {}; // Akan menyimpan semua playlist dari config
-        this.playlist = []; // Playlist yang sedang aktif
+        this.allPlaylists = {};
+        this.playlist = [];
         this.lyrics = [];
         this.currentLyricIndex = 0;
+
+        this.currentSource = 'audio';
+        this.ytPlayer = null;
+        this.ytApiReady = false;
+        this.ytApiReadyPromise = null;
+        this.ytPollIntervalId = null;
+        this.youtubeIframeContainer = null;
 
         this.init();
     }
@@ -30,8 +37,7 @@ class MusicPlayer {
         await this.loadConfig();
         this.setupEventListeners();
         this.setVolume();
-        // Memuat playlist default atau playlist pertama jika default tidak ada
-        const defaultPlaylistName = this.allPlaylists.defaultPlaylist || Object.keys(this.allPlaylists.playlists)[0];
+        const defaultPlaylistName = (this.allPlaylists && (this.allPlaylists.defaultPlaylist || Object.keys(this.allPlaylists.playlists || {})[0]));
         if (defaultPlaylistName) {
             this.loadSpecificPlaylist(defaultPlaylistName);
         } else {
@@ -43,11 +49,10 @@ class MusicPlayer {
         try {
             const response = await fetch('config.json');
             const config = await response.json();
-            this.allPlaylists = config; // Simpan seluruh konfigurasi
+            this.allPlaylists = config;
 
-            // Isi dropdown playlist
-            const playlistNames = Object.keys(config.playlists);
-            this.playlistSelect.innerHTML = ''; // Bersihkan opsi sebelumnya
+            const playlistNames = Object.keys(config.playlists || {});
+            this.playlistSelect.innerHTML = '';
             playlistNames.forEach(name => {
                 const option = document.createElement('option');
                 option.value = name;
@@ -55,20 +60,16 @@ class MusicPlayer {
                 this.playlistSelect.appendChild(option);
             });
 
-            // Set playlist default di dropdown
             if (config.defaultPlaylist) {
                 this.playlistSelect.value = config.defaultPlaylist;
             }
 
-            // Set playlist title
             const playlistTitle = document.getElementById('playlistTitle');
-            if (config.playlistName) { // Asumsi masih ada playlistName di root jika diperlukan
+            if (config.playlistName) {
                 playlistTitle.textContent = config.playlistName;
             } else if (config.defaultPlaylist) {
-                playlistTitle.textContent = config.defaultPlaylist; // Gunakan nama playlist default
+                playlistTitle.textContent = config.defaultPlaylist;
             }
-
-
         } catch (error) {
             console.error('Error loading config:', error);
         }
@@ -79,37 +80,58 @@ class MusicPlayer {
         this.prevBtn.addEventListener('click', () => this.playPrevious());
         this.nextBtn.addEventListener('click', () => this.playNext());
 
-        this.audio.addEventListener('timeupdate', () => this.updateProgress());
-        this.audio.addEventListener('loadedmetadata', () => this.updateDuration());
+        this.audio.addEventListener('timeupdate', () => {
+            if (this.currentSource === 'audio') this.updateProgress();
+        });
+        this.audio.addEventListener('loadedmetadata', () => {
+            if (this.currentSource === 'audio') this.updateDuration();
+        });
         this.audio.addEventListener('ended', () => this.playNext());
 
         this.progressBar.addEventListener('input', () => this.seek());
         this.volumeBar.addEventListener('input', () => this.setVolume());
 
-        // Event listener untuk perubahan playlist
         this.playlistSelect.addEventListener('change', (event) => {
             this.loadSpecificPlaylist(event.target.value);
         });
 
-        // Welcome panel start button
         const startButton = document.getElementById('startButton');
         const welcomePanel = document.getElementById('welcomePanel');
 
         startButton.addEventListener('click', () => {
             welcomePanel.classList.add('hidden');
-            this.audio.play();
+            this.playCurrentSourceIfReady();
             this.isPlaying = true;
             this.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
         });
 
-        // Auto-play when clicking anywhere
         document.addEventListener('click', () => {
             if (!this.isPlaying && welcomePanel.classList.contains('hidden')) {
-                this.audio.play();
+                this.playCurrentSourceIfReady();
                 this.isPlaying = true;
                 this.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             }
         }, { once: true });
+    }
+
+    playCurrentSourceIfReady() {
+        if (this.currentSource === 'audio') {
+            this.audio.play().catch(() => {});
+        } else if (this.currentSource === 'youtube' && this.ytPlayer && this.ytApiReady) {
+            try { this.ytPlayer.playVideo(); } catch (e) {}
+        }
+    }
+
+    getYouTubeId(song) {
+        if (!song) return null;
+        if (song.youtubeId) return song.youtubeId;
+        const p = song.path || '';
+        if (p.startsWith('yt:')) return p.slice(3);
+        const urlRegex = /(?:v=|\/)([0-9A-Za-z_-]{11})(?:\b|&|$)/;
+        const m = p.match(urlRegex);
+        if (m) return m[1];
+        if (p.length === 11 && /^[0-9A-Za-z_-]{11}$/.test(p)) return p;
+        return null;
     }
 
     loadSpecificPlaylist(playlistName) {
@@ -118,7 +140,6 @@ class MusicPlayer {
             this.currentSongIndex = 0;
             this.loadSong(this.currentSongIndex);
 
-            // Update playlist title display
             const playlistTitle = document.getElementById('playlistTitle');
             playlistTitle.textContent = playlistName;
         } else {
@@ -134,54 +155,232 @@ class MusicPlayer {
             this.currentLyric.textContent = 'Lyrics not available';
             this.nextLyric.textContent = '';
             this.futureLyric.textContent = '';
-            this.audio.src = ''; // Clear audio source
+            this.audio.src = '';
             return;
         }
 
+        this.currentSongIndex = index;
         const song = this.playlist[index];
-        this.audio.src = song.path;
-        this.songTitle.textContent = song.title;
-        this.artist.textContent = song.artist;
-        this.albumArt.src = song.albumArt || 'placeholder.jpg';
+        const videoId = this.getYouTubeId(song);
+        if (videoId) {
+            this.loadYouTubeSong(videoId, song);
+        } else {
+            this.loadLocalSong(song);
+        }
+    }
 
-        // Update background blur
+    loadLocalSong(song) {
+        this.currentSource = 'audio';
+        this.destroyYouTubePlayer();
+        this.audio.src = song.path || '';
+        this.songTitle.textContent = song.title || 'Unknown';
+        this.artist.textContent = song.artist || '';
+        this.albumArt.src = song.albumArt || 'placeholder.jpg';
         const backgroundBlur = document.getElementById('backgroundBlur');
         backgroundBlur.style.backgroundImage = `url(${song.albumArt || 'placeholder.jpg'})`;
+        this.updateSourceBadge('local');
+        if (song.lyricsPath) this.loadLyrics(song.lyricsPath);
+        else {
+            this.lyrics = [];
+            this.currentLyric.textContent = 'Lirik tidak tersedia';
+            this.nextLyric.textContent = '';
+            this.futureLyric.textContent = '';
+        }
+        if (this.isPlaying) this.audio.play().catch(() => {});
+    }
 
-        this.loadLyrics(song.lyricsPath);
+    async loadYouTubeSong(videoId, song) {
+        this.currentSource = 'youtube';
+        try { this.audio.pause(); } catch (e) {}
+        this.songTitle.textContent = song.title || 'YouTube Audio';
+        this.artist.textContent = song.artist || '';
+        // Use YouTube thumbnail if no albumArt specified
+        const albumArt = song.albumArt || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        this.albumArt.src = albumArt;
+        const backgroundBlur = document.getElementById('backgroundBlur');
+        backgroundBlur.style.backgroundImage = `url(${albumArt})`;
+        this.updateSourceBadge('youtube');
 
-        if (this.isPlaying) {
-            this.audio.play();
+        if (song.lyricsPath) {
+            await this.loadLyrics(song.lyricsPath);
+        } else {
+            await this.fetchYouTubeCaptions(videoId);
+        }
+
+        await this.ensureYouTubeApi();
+
+        // Use the pre-existing container from HTML
+        const container = document.getElementById('youtubePlayerContainer');
+        if (!this.youtubeIframeContainer) {
+            // Create an inner div for the YT.Player to replace
+            this.youtubeIframeContainer = document.createElement('div');
+            this.youtubeIframeContainer.id = 'youtubePlayer';
+            container.innerHTML = '';
+            container.appendChild(this.youtubeIframeContainer);
+        }
+
+        if (this.ytPlayer) {
+            try {
+                this.ytPlayer.loadVideoById(videoId);
+            } catch (e) {
+                try { this.ytPlayer.destroy(); } catch (ee) {}
+                this.ytPlayer = null;
+            }
+        }
+
+        if (!this.ytPlayer) {
+            this.ytPlayer = new YT.Player(this.youtubeIframeContainer.id, {
+                height: '0',
+                width: '0',
+                videoId: videoId,
+                playerVars: { controls: 0, showinfo: 0, modestbranding: 1, rel: 0, playsinline: 1 },
+                events: {
+                    onReady: (e) => {
+                        try { e.target.setVolume(parseInt(this.volumeBar.value, 10)); } catch (ex) {}
+                        if (this.isPlaying) try { e.target.playVideo(); } catch (ex) {}
+                        this.updateDuration();
+                    },
+                    onStateChange: (e) => {
+                        const YTState = window.YT && window.YT.PlayerState;
+                        if (YTState && e.data === YTState.ENDED) {
+                            this.playNext();
+                        } else if (YTState && e.data === YTState.PLAYING) {
+                            this.isPlaying = true;
+                            this.startYTTimer();
+                            this.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                        } else if (YTState && e.data === YTState.PAUSED) {
+                            this.isPlaying = false;
+                            this.stopYTTimer();
+                            this.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    ensureYouTubeApi() {
+        if (this.ytApiReadyPromise) return this.ytApiReadyPromise;
+        this.ytApiReadyPromise = new Promise((resolve) => {
+            if (window.YT && window.YT.Player) {
+                this.ytApiReady = true;
+                resolve();
+                return;
+            }
+            const prev = window.onYouTubeIframeAPIReady;
+            window.onYouTubeIframeAPIReady = () => {
+                this.ytApiReady = true;
+                if (typeof prev === 'function') prev();
+                resolve();
+            };
+            const tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            document.head.appendChild(tag);
+        });
+        return this.ytApiReadyPromise;
+    }
+
+    startYTTimer() {
+        if (this.ytPollIntervalId) return;
+        this.ytPollIntervalId = setInterval(() => this.updateProgress(), 250);
+    }
+
+    stopYTTimer() {
+        if (!this.ytPollIntervalId) return;
+        clearInterval(this.ytPollIntervalId);
+        this.ytPollIntervalId = null;
+    }
+
+    destroyYouTubePlayer() {
+        if (this.ytPlayer) {
+            try { this.ytPlayer.destroy(); } catch (e) {}
+            this.ytPlayer = null;
+        }
+        this.stopYTTimer();
+        // Clear the inner content but keep the container in the DOM
+        if (this.youtubeIframeContainer) {
+            this.youtubeIframeContainer = null;
+        }
+        const container = document.getElementById('youtubePlayerContainer');
+        if (container) container.innerHTML = '';
+    }
+
+    async fetchYouTubeCaptions(videoId) {
+        this.lyrics = [];
+        this.currentLyricIndex = 0;
+        const attemptUrls = [
+            `https://www.youtube.com/api/timedtext?v=${videoId}&fmt=json3&tlang=id`,
+            `https://www.youtube.com/api/timedtext?v=${videoId}&fmt=json3`,
+            `https://video.google.com/timedtext?v=${videoId}&fmt=json3&tlang=id`,
+            `https://video.google.com/timedtext?v=${videoId}&fmt=json3`
+        ];
+        for (const url of attemptUrls) {
+            try {
+                const res = await fetch(url);
+                if (!res.ok) continue;
+                const text = await res.text();
+                if (!text) continue;
+                const trimmed = text.trim();
+                if (trimmed.startsWith('{')) {
+                    const data = JSON.parse(trimmed);
+                    if (data && data.events) {
+                        this.lyrics = data.events.map(ev => {
+                            const time = (ev.tStartMs || 0) / 1000;
+                            const segs = ev.segs || [];
+                            const str = segs.map(s => s.utf8 || '').join('').replace(/\n/g, ' ').trim();
+                            return { time, text: str };
+                        });
+                        break;
+                    }
+                } else if (trimmed.startsWith('<')) {
+                    const parser = new DOMParser();
+                    const xml = parser.parseFromString(trimmed, 'application/xml');
+                    const texts = Array.from(xml.getElementsByTagName('text'));
+                    if (texts.length > 0) {
+                        this.lyrics = texts.map(node => {
+                            const start = parseFloat(node.getAttribute('start') || '0');
+                            const content = (node.textContent || '').replace(/\n/g, ' ').trim();
+                            return { time: start, text: content };
+                        });
+                        break;
+                    }
+                } else {
+                    const parsed = this.parseLRC(text);
+                    if (parsed.length > 0) { this.lyrics = parsed; break; }
+                }
+            } catch (err) { continue; }
+        }
+        this.lyrics.sort((a, b) => a.time - b.time);
+        if (this.lyrics.length === 0) {
+            this.currentLyric.textContent = 'Lirik tidak tersedia';
+            this.nextLyric.textContent = '';
+            this.futureLyric.textContent = '';
         }
     }
 
     async loadLyrics(lyricsPath) {
         if (!lyricsPath) {
             this.lyrics = [];
-            this.currentLyric.textContent = 'Lirik tidak tersedia'; // Pesan baru
+            this.currentLyric.textContent = 'Lirik tidak tersedia';
             this.nextLyric.textContent = '';
             this.futureLyric.textContent = '';
             return;
         }
-
         try {
             const response = await fetch(lyricsPath);
-            if (!response.ok) { // Check if response is not OK (e.g., 404 Not Found)
-                throw new Error('Lyrics file not found or could not be loaded.');
-            }
+            if (!response.ok) throw new Error('Lyrics file not found or could not be loaded.');
             const lrcText = await response.text();
             this.lyrics = this.parseLRC(lrcText);
             this.currentLyricIndex = 0;
-
             if (this.lyrics.length === 0) {
-                this.currentLyric.textContent = 'Lirik tidak tersedia'; // Pesan baru
+                this.currentLyric.textContent = 'Lirik tidak tersedia';
                 this.nextLyric.textContent = '';
                 this.futureLyric.textContent = '';
             }
         } catch (error) {
             console.error('Error loading lyrics:', error);
             this.lyrics = [];
-            this.currentLyric.textContent = 'Lirik tidak tersedia'; // Pesan baru
+            this.currentLyric.textContent = 'Lirik tidak tersedia';
             this.nextLyric.textContent = '';
             this.futureLyric.textContent = '';
         }
@@ -190,33 +389,28 @@ class MusicPlayer {
     parseLRC(lrcText) {
         const lines = lrcText.split('\n');
         const lyrics = [];
-
         lines.forEach(line => {
             const match = line.match(/\[(\d{2}):(\d{2})\.(\d{2})\](.*)/);
             if (match) {
-                const minutes = parseInt(match[1]);
-                const seconds = parseInt(match[2]);
-                const milliseconds = parseInt(match[3]) * 10;
+                const minutes = parseInt(match[1], 10);
+                const seconds = parseInt(match[2], 10);
+                const milliseconds = parseInt(match[3], 10) * 10;
                 const time = minutes * 60 + seconds + milliseconds / 1000;
                 const text = match[4].trim();
                 lyrics.push({ time, text });
             }
         });
-
         return lyrics.sort((a, b) => a.time - b.time);
     }
 
     updateLyrics() {
         if (this.lyrics.length === 0) {
-            this.currentLyric.textContent = 'Lirik tidak tersedia'; // Pesan baru
+            this.currentLyric.textContent = 'Lirik tidak tersedia';
             this.nextLyric.textContent = '';
             this.futureLyric.textContent = '';
             return;
         }
-
-        const currentTime = this.audio.currentTime;
-
-        // Find current lyric index
+        const currentTime = this.getCurrentTime();
         let found = false;
         for (let i = 0; i < this.lyrics.length; i++) {
             if (currentTime < this.lyrics[i].time) {
@@ -225,12 +419,7 @@ class MusicPlayer {
                 break;
             }
         }
-        if (!found && this.lyrics.length > 0) { // If audio has passed all lyrics
-            this.currentLyricIndex = this.lyrics.length - 1;
-        }
-
-
-        // Update lyric display
+        if (!found && this.lyrics.length > 0) this.currentLyricIndex = this.lyrics.length - 1;
         this.currentLyric.textContent = this.lyrics[this.currentLyricIndex]?.text || '';
         this.nextLyric.textContent = this.lyrics[this.currentLyricIndex + 1]?.text || '';
         this.futureLyric.textContent = this.lyrics[this.currentLyricIndex + 2]?.text || '';
@@ -238,13 +427,16 @@ class MusicPlayer {
 
     togglePlay() {
         if (this.isPlaying) {
-            this.audio.pause();
+            if (this.currentSource === 'audio') this.audio.pause();
+            else if (this.currentSource === 'youtube' && this.ytPlayer) try { this.ytPlayer.pauseVideo(); } catch (e) {}
             this.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            this.isPlaying = false;
         } else {
-            this.audio.play();
+            if (this.currentSource === 'audio') this.audio.play().catch(() => {});
+            else if (this.currentSource === 'youtube' && this.ytPlayer) try { this.ytPlayer.playVideo(); } catch (e) {}
             this.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            this.isPlaying = true;
         }
-        this.isPlaying = !this.isPlaying;
     }
 
     playPrevious() {
@@ -259,34 +451,82 @@ class MusicPlayer {
         this.loadSong(this.currentSongIndex);
     }
 
+    getCurrentTime() {
+        if (this.currentSource === 'audio') return this.audio.currentTime || 0;
+        if (this.currentSource === 'youtube' && this.ytPlayer && this.ytApiReady) {
+            try { return this.ytPlayer.getCurrentTime() || 0; } catch (e) { return 0; }
+        }
+        return 0;
+    }
+
+    getDuration() {
+        if (this.currentSource === 'audio') return this.audio.duration || 0;
+        if (this.currentSource === 'youtube' && this.ytPlayer && this.ytApiReady) {
+            try { return this.ytPlayer.getDuration() || 0; } catch (e) { return 0; }
+        }
+        return 0;
+    }
+
     updateProgress() {
-        const progress = (this.audio.currentTime / this.audio.duration) * 100;
+        const currentTime = this.getCurrentTime();
+        const duration = this.getDuration();
+        const progress = (duration > 0) ? (currentTime / duration) * 100 : 0;
         this.progressBar.value = progress || 0;
-        this.currentTimeDisplay.textContent = this.formatTime(this.audio.currentTime);
+        this.currentTimeDisplay.textContent = this.formatTime(currentTime || 0);
         this.updateLyrics();
     }
 
     updateDuration() {
-        this.durationDisplay.textContent = this.formatTime(this.audio.duration);
+        const duration = this.getDuration();
+        this.durationDisplay.textContent = this.formatTime(duration || 0);
     }
 
     seek() {
-        const time = (this.progressBar.value / 100) * this.audio.duration;
-        this.audio.currentTime = time;
+        const duration = this.getDuration();
+        const time = (this.progressBar.value / 100) * (duration || 0);
+        if (this.currentSource === 'audio') {
+            this.audio.currentTime = time;
+        } else if (this.currentSource === 'youtube' && this.ytPlayer) {
+            try { this.ytPlayer.seekTo(time, true); } catch (e) {}
+        }
     }
 
     setVolume() {
-        this.audio.volume = this.volumeBar.value / 100;
+        const val = parseInt(this.volumeBar.value, 10) || 0;
+        if (this.currentSource === 'audio') {
+            this.audio.volume = val / 100;
+        }
+        if (this.ytPlayer && this.ytApiReady) {
+            try { this.ytPlayer.setVolume(val); } catch (e) {}
+        }
     }
 
     formatTime(seconds) {
+        if (!isFinite(seconds) || Number.isNaN(seconds)) seconds = 0;
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = Math.floor(seconds % 60);
         return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
     }
+
+    updateSourceBadge(source) {
+        let badge = document.getElementById('sourceBadge');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.id = 'sourceBadge';
+            this.artist.parentNode.appendChild(badge);
+        }
+        if (source === 'youtube') {
+            badge.innerHTML = '<i class="fab fa-youtube"></i> YouTube';
+            badge.className = 'source-badge source-youtube';
+            badge.style.display = 'inline-flex';
+        } else {
+            badge.innerHTML = '<i class="fas fa-music"></i> Local';
+            badge.className = 'source-badge source-local';
+            badge.style.display = 'inline-flex';
+        }
+    }
 }
 
-// Initialize player when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new MusicPlayer();
 });

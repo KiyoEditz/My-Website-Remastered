@@ -16,20 +16,16 @@
         "lyricsPath": "lyrics/song2.lrc"
       }
     ],
-    "st LainPlayli": [
+    "YouTube Playlist": [
       {
-        "title": "J 3udul Lagu",
-        "artist": "Nama Artis 3",
-        "path": "music/song1.mp3",
-        "albumArt": "images/album1.jpg",
-        "lyricsPath": "lyrics/song1.lrc"
+        "title": "YouTube Song (Test)",
+        "artist": "YouTube Artist",
+        "youtubeId": "55moNn0leAU"
       },
       {
-        "title": "Judul Lagu 4",
-        "artist": "Nama Artis 4",
-        "path": "music/song2.mp3",
-        "albumArt": "images/album2.jpg",
-        "lyricsPath": "lyrics/song2.lrc"
+        "title": "Sparkle - RADWIMPS",
+        "artist": "RADWIMPS",
+        "youtubeId": "a2GujJZfXpg"
       }
     ]
   },

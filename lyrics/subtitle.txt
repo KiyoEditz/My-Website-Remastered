@@ -1,0 +1,229 @@
+{
+  "wireMagic": "pb3",
+  "pens": [ {
+  
+  } ],
+  "wsWinStyles": [ {
+  
+  } ],
+  "wpWinPositions": [ {
+  
+  } ],
+  "events": [ {
+    "tStartMs": 26700,
+    "dDurationMs": 2100,
+    "segs": [ {
+      "utf8": "Ribuan tahun lamanya,"
+    } ]
+  }, {
+    "tStartMs": 28900,
+    "dDurationMs": 2000,
+    "segs": [ {
+      "utf8": "selama ini aku menunggu,"
+    } ]
+  }, {
+    "tStartMs": 30900,
+    "dDurationMs": 1800,
+    "segs": [ {
+      "utf8": "Ima.\nDan sekarang,"
+    } ]
+  }, {
+    "tStartMs": 32800,
+    "dDurationMs": 3000,
+    "segs": [ {
+      "utf8": "hari kita bertemu akhirnya tiba,"
+    } ]
+  }, {
+    "tStartMs": 35900,
+    "dDurationMs": 1000,
+    "segs": [ {
+      "utf8": "Hora.\nJadi, kumohon,"
+    } ]
+  }, {
+    "tStartMs": 37100,
+    "dDurationMs": 3400,
+    "segs": [ {
+      "utf8": "tetaplah dekat denganku dan pegang tanganku."
+    } ]
+  }, {
+    "tStartMs": 40700,
+    "dDurationMs": 6200,
+    "segs": [ {
+      "utf8": "Jangan pernah lepaskan aku lagi."
+    } ]
+  }, {
+    "tStartMs": 63900,
+    "dDurationMs": 3400,
+    "segs": [ {
+      "utf8": "Pinjamkan telingamu dan dengarkan baik-baik."
+    } ]
+  }, {
+    "tStartMs": 67500,
+    "dDurationMs": 2300,
+    "segs": [ {
+      "utf8": "Dapatkah kau mendengar bintang-bintang jatuh"
+    } ]
+  }, {
+    "tStartMs": 69900,
+    "dDurationMs": 3200,
+    "segs": [ {
+      "utf8": "saat mereka datang menyambutmu?"
+    } ]
+  }, {
+    "tStartMs": 73300,
+    "dDurationMs": 3600,
+    "segs": [ {
+      "utf8": "Tidakkah kau mau berdiri di sisiku?"
+    } ]
+  }, {
+    "tStartMs": 77000,
+    "dDurationMs": 2200,
+    "segs": [ {
+      "utf8": "Ada dunia yang tak seorang pun tahu"
+    } ]
+  }, {
+    "tStartMs": 79400,
+    "dDurationMs": 3200,
+    "segs": [ {
+      "utf8": "Menunggu di sini untukku dan kamu"
+    } ]
+  }, {
+    "tStartMs": 82800,
+    "dDurationMs": 3800,
+    "segs": [ {
+      "utf8": "Genggam tanganku dan berdansa bersamaku"
+    } ]
+  }, {
+    "tStartMs": 86800,
+    "dDurationMs": 2100,
+    "segs": [ {
+      "utf8": "Mari bunyikan gong pembuka"
+    } ]
+  }, {
+    "tStartMs": 89000,
+    "dDurationMs": 2400,
+    "segs": [ {
+      "utf8": "Dapatkah kau mendengarnya berdering?"
+    } ]
+  }, {
+    "tStartMs": 91600,
+    "dDurationMs": 2200,
+    "segs": [ {
+      "utf8": "Bernyanyilah bersamaku, la la la"
+    } ]
+  }, {
+    "tStartMs": 94000,
+    "dDurationMs": 1900,
+    "segs": [ {
+      "utf8": "Berkumandang, la la la"
+    } ]
+  }, {
+    "tStartMs": 96100,
+    "dDurationMs": 4000,
+    "segs": [ {
+      "utf8": "Dan lihatlah bagaimana bahkan di jalan yang paling gelap sekalipun"
+    } ]
+  }, {
+    "tStartMs": 100300,
+    "dDurationMs": 3600,
+    "segs": [ {
+      "utf8": "Bulan bersinar menerangi jalan kita"
+    } ]
+  }, {
+    "tStartMs": 105300,
+    "dDurationMs": 3600,
+    "segs": [ {
+      "utf8": "Di tepi laut sana"
+    } ]
+  }, {
+    "tStartMs": 109100,
+    "dDurationMs": 3700,
+    "segs": [ {
+      "utf8": "Dapatkah kau mencium aroma garam di udara"
+    } ]
+  }, {
+    "tStartMs": 113000,
+    "dDurationMs": 3500,
+    "segs": [ {
+      "utf8": "Dan merasakan aku berdiri tepat di sana bersamamu?"
+    } ]
+  }, {
+    "tStartMs": 116700,
+    "dDurationMs": 1700,
+    "segs": [ {
+      "utf8": "Karena selamanya"
+    } ]
+  }, {
+    "tStartMs": 118600,
+    "dDurationMs": 3600,
+    "segs": [ {
+      "utf8": "aku berjanji bahwa di suatu tempat di luar sana"
+    } ]
+  }, {
+    "tStartMs": 122400,
+    "dDurationMs": 3300,
+    "segs": [ {
+      "utf8": "aku akan tetap mengawasimu"
+    } ]
+  }, {
+    "tStartMs": 125900,
+    "dDurationMs": 1000,
+    "segs": [ {
+      "utf8": "Jadi tolong"
+    } ]
+  }, {
+    "tStartMs": 127100,
+    "dDurationMs": 1100,
+    "segs": [ {
+      "utf8": "Teruslah tertawa dari"
+    } ]
+  }, {
+    "tStartMs": 128400,
+    "dDurationMs": 2300,
+    "segs": [ {
+      "utf8": "lubuk hatimu"
+    } ]
+  }, {
+    "tStartMs": 130900,
+    "dDurationMs": 1100,
+    "segs": [ {
+      "utf8": "Dan tolong"
+    } ]
+  }, {
+    "tStartMs": 132100,
+    "dDurationMs": 3200,
+    "segs": [ {
+      "utf8": "Teruslah kumpulkan hari-hari cerah dan bahagia itu"
+    } ]
+  }, {
+    "tStartMs": 135500,
+    "dDurationMs": 3100,
+    "segs": [ {
+      "utf8": "Dan di masa depan yang kau ciptakan"
+    } ]
+  }, {
+    "tStartMs": 138800,
+    "dDurationMs": 1100,
+    "segs": [ {
+      "utf8": "Kau dan aku"
+    } ]
+  }, {
+    "tStartMs": 140100,
+    "dDurationMs": 6100,
+    "segs": [ {
+      "utf8": "Dapat merasakan hati kita bersinar dengan sukacita"
+    } ]
+  }, {
+    "tStartMs": 152800,
+    "dDurationMs": 4200,
+    "segs": [ {
+      "utf8": "Kita akan mewujudkannya sekarang"
+    } ]
+  }, {
+    "tStartMs": 157600,
+    "dDurationMs": 5700,
+    "segs": [ {
+      "utf8": "Saatnya membiarkan kisah kita dimulai"
+    } ]
+  } ]
+}

@@ -129,6 +129,31 @@
     font-weight: 500;
 }
 
+/* --- Source Badge (YouTube / Local indicator) --- */
+.source-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 0.5rem;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.source-youtube {
+    background: rgba(255, 0, 0, 0.1);
+    color: #cc0000;
+    border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.source-local {
+    background: rgba(0, 95, 115, 0.1);
+    color: #005f73;
+    border: 1px solid rgba(0, 95, 115, 0.2);
+}
 /* --- Progress & Volume Bar --- */
 .progress-container, .volume-container {
     display: flex;
