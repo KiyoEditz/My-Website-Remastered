@@ -361,14 +361,19 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 /* --- Responsive untuk Mobile --- */
 @media (max-width: 768px) {
+    .welcome-content {
+        padding: 2rem 1.5rem;
+        width: 90%;
+        max-width: 90%;
+    }
+
     .player-container {
         padding: 1.5rem;
-        /* Mengecilkan padding agar tidak sesak di HP */
-        margin: 1rem;
-        /* Memberi jarak aman dari tepi layar HP */
-        width: auto;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
         min-height: auto;
-        /* Mengembalikan ukuran otomatis di layar HP agar susunan vertikal pas */
+        box-sizing: border-box;
     }
 
     .player-layout {
@@ -379,12 +384,10 @@ input[type="range"]::-webkit-slider-thumb:hover {
     .album-art-wrapper {
         display: flex;
         justify-content: center;
-        /* Memastikan foto album di tengah */
     }
 
     .album-art-wrapper img {
         max-width: 250px;
-        /* Membatasi besaran foto agar tidak memakan layar */
         height: auto;
         aspect-ratio: 1 / 1;
         border-radius: 16px;
@@ -396,9 +399,26 @@ input[type="range"]::-webkit-slider-thumb:hover {
         text-align: center;
     }
 
+    .playlist-selector,
+    .select-wrapper {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .custom-pill-select {
+        width: 100%;
+        max-width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
     .player-info {
         text-align: center;
-        /* Teks judul lagu dipusatkan di HP */
+    }
+
+    .player-info h2 {
+        font-size: 1.5rem;
     }
 
     .controls-row {
@@ -413,5 +433,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
     .controls {
         gap: 1.5rem;
+        width: 100%;
+        justify-content: center;
     }
 }
