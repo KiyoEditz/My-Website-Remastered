@@ -48,12 +48,12 @@
 
 .welcome-content h2 {
     font-size: 1.5rem;
-    color: #111;
+    color: var(--text-main);
     margin-bottom: 0.5rem;
 }
 
 .welcome-content p {
-    color: #555;
+    color: var(--text-muted);
     margin-bottom: 2rem;
     font-size: 0.95rem;
 }
@@ -77,8 +77,8 @@
 
 .glass-select {
     background: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(0, 95, 115, 0.2);
-    color: #005f73;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    color: var(--primary);
     padding: 0.5rem 1rem;
     border-radius: 8px;
     font-family: 'Inter', sans-serif;
@@ -117,14 +117,14 @@
 
 .player-info h2 {
     font-size: 1.8rem;
-    color: #111;
+    color: var(--text-main);
     font-weight: 700;
     margin-bottom: 0.2rem;
     letter-spacing: -0.5px;
 }
 
 .player-info p {
-    color: #005f73;
+    color: var(--primary);
     font-size: 1rem;
     font-weight: 500;
 }
@@ -144,15 +144,15 @@
 }
 
 .source-youtube {
-    background: rgba(255, 0, 0, 0.1);
-    color: #cc0000;
-    border: 1px solid rgba(255, 0, 0, 0.2);
+    background: rgba(236, 72, 153, 0.1);
+    color: var(--accent-energy);
+    border: 1px solid rgba(236, 72, 153, 0.2);
 }
 
 .source-local {
-    background: rgba(0, 95, 115, 0.1);
-    color: #005f73;
-    border: 1px solid rgba(0, 95, 115, 0.2);
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
+    border: 1px solid rgba(99, 102, 241, 0.2);
 }
 /* --- Progress & Volume Bar --- */
 .progress-container, .volume-container {
@@ -166,14 +166,14 @@
 
 .progress-container span {
     font-size: 0.85rem;
-    color: #666;
+    color: var(--text-muted);
     font-variant-numeric: tabular-nums; 
     min-width: 45px; /* Mengunci lebar teks agar slider TIDAK bergeser/miring */
     text-align: center;
 }
 
 .volume-container i {
-    color: #666;
+    color: var(--text-muted);
     width: 20px; /* Mengunci lebar ikon */
     text-align: center;
 }
@@ -192,10 +192,10 @@ input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 14px;
     height: 14px;
-    background: #005f73;
+    background: var(--primary);
     border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 95, 115, 0.4);
+    box-shadow: 0 2px 5px rgba(99, 102, 241, 0.4);
     transition: transform 0.1s;
 }
 
@@ -216,20 +216,20 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .control-btn {
     background: none;
     border: none;
-    color: #444;
+    color: var(--text-muted);
     font-size: 1.5rem;
     cursor: pointer;
     transition: color 0.2s, transform 0.2s;
 }
 
 .control-btn:hover {
-    color: #005f73;
+    color: var(--primary);
     transform: scale(1.1);
 }
 
 /* Tombol Play Besar */
 .play-btn {
-    background: linear-gradient(135deg, #005f73 0%, #0a9396 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent-fresh) 100%);
     color: white;
     width: 55px;
     height: 55px;
@@ -237,13 +237,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 15px rgba(0, 95, 115, 0.3);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
 .play-btn:hover {
     color: white;
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(0, 95, 115, 0.4);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
 }
 
 /* --- Area Lirik --- */
@@ -266,12 +266,12 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .active-lyric {
     font-size: 1.15rem;
     font-weight: 600;
-    color: #005f73; /* Warna saat lirik dinyanyikan */
+    color: var(--primary); /* Warna saat lirik dinyanyikan */
 }
 
 .upcoming-lyric {
     font-size: 0.95rem;
-    color: #888;
+    color: var(--text-muted);
 }
 
 /* --- Responsive untuk Mobile --- */

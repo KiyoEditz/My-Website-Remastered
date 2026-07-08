@@ -9,13 +9,13 @@
 
 .section-title {
     font-size: 2rem;
-    color: #111;
+    color: var(--text-main);
     font-weight: 700;
     margin-bottom: 0.5rem;
 }
 
 .section-subtitle {
-    color: #666;
+    color: var(--text-muted);
     margin-bottom: 2.5rem;
     font-size: 1rem;
 }
