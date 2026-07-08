@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>Music | Abi Andriansyah</title>
 </head>
+
 <body>
-    
+
     <div class="background-blur" id="backgroundBlur"></div>
 
     <nav class="navbar">
@@ -22,7 +24,7 @@
                 <li><a href="galeri.html">Galeri</a></li>
                 <li><a href="music.html" class="active">Music</a></li>
                 <li><a href="talent.html">Talent</a></li>
-                <li><a href="contact.html">Contact</a></li>   
+                <li><a href="contact.html">Contact</a></li>
             </ul>
         </div>
     </nav>
@@ -38,11 +40,17 @@
 
     <main class="container">
         <section class="player-container glass-effect fade-in">
-            
+
             <div class="player-header">
-                <h1 id="playlistTitle" class="section-title">Playlist</h1>
+                <div class="header-title-wrapper">
+                    <i class="fas fa-list-ul header-icon"></i>
+                    <h1 id="playlistTitle" class="highlight-text" style="font-size: 1.8rem; margin:0;">Playlist</h1>
+                </div>
                 <div class="playlist-selector">
-                    <select id="playlistSelect" class="glass-select"></select>
+                    <div class="select-wrapper">
+                        <i class="fas fa-music select-icon"></i>
+                        <select id="playlistSelect" class="glass-select custom-pill-select"></select>
+                    </div>
                 </div>
             </div>
 
@@ -50,31 +58,31 @@
                 <div class="album-art-wrapper">
                     <img id="albumArt" src="thumbnail.jpg" alt="Album Art">
                 </div>
-                
+
                 <div class="player-controls-wrapper">
-                    
+
                     <div class="player-info">
                         <h2 id="songTitle">Memuat Lagu...</h2>
                         <p id="artist">Menunggu aksi pengguna</p>
                     </div>
-                    
+
                     <div class="progress-container">
                         <span id="currentTime">0:00</span>
                         <input type="range" id="progressBar" min="0" max="100" value="0">
                         <span id="duration">0:00</span>
                     </div>
-                    
+
                     <div class="controls">
                         <button id="prevBtn" class="control-btn"><i class="fas fa-backward"></i></button>
                         <button id="playPauseBtn" class="control-btn play-btn"><i class="fas fa-play"></i></button>
                         <button id="nextBtn" class="control-btn"><i class="fas fa-forward"></i></button>
                     </div>
-                    
+
                     <div class="volume-container">
                         <i class="fas fa-volume-up"></i>
                         <input type="range" id="volumeBar" min="0" max="100" value="30">
                     </div>
-                    
+
                     <div class="lyrics-container">
                         <div class="lyrics-scroll">
                             <p id="currentLyric" class="active-lyric">Lirik akan muncul di sini</p>
@@ -89,10 +97,12 @@
     </main>
 
     <audio id="audio"></audio>
-    
+
     <!-- Hidden YouTube IFrame Player Container -->
-    <div id="youtubePlayerContainer" style="position:absolute;width:1px;height:1px;left:-9999px;top:auto;overflow:hidden;"></div>
+    <div id="youtubePlayerContainer"
+        style="position:absolute;width:1px;height:1px;left:-9999px;top:auto;overflow:hidden;"></div>
 
     <script src="script.js"></script>
 </body>
+
 </html>

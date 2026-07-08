@@ -14,6 +14,20 @@
         "path": "music/song2.mp3",
         "albumArt": "images/album2.jpg",
         "lyricsPath": "lyrics/song2.lrc"
+      },
+      {
+        "title": "The Vampire",
+        "artist": "DECO*27",
+        "path": "music/the_vampire_-_deco_27.mp3",
+        "albumArt": "images/the_vampire_-_deco_27.jpg",
+        "lyricsPath": "lyrics/the_vampire_-_deco_27.lrc"
+      },
+      {
+        "title": "ビビデバ",
+        "artist": "Hoshimachi Suisei",
+        "path": "music/ビビデバ_-_hoshimachi_suisei.mp3",
+        "albumArt": "images/ビビデバ_-_hoshimachi_suisei.jpg",
+        "lyricsPath": "lyrics/ビビデバ_-_hoshimachi_suisei.lrc"
       }
     ],
     "YouTube Playlist": [
