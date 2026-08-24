@@ -1,5 +1,10 @@
 # Editor directories and files
 .vscode/
+# Abaikan isi .claude (settings lokal), tapi definisi subagent tetap dilacak.
+# Catatan: harus '.claude/*' bukan '.claude/', karena git tidak masuk ke
+# direktori yang sudah dikecualikan sehingga negasi '!' tidak akan berlaku.
+.claude/*
+!.claude/agents/
 .idea/
 *.suo
 *.ntvs*
@@ -26,7 +31,7 @@ pnpm-debug.log*
 # Logs
 logs
 *.log
-
+error.txt
 # Design resources
 example.html
 pallet.md

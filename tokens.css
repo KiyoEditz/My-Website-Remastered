@@ -1,0 +1,28 @@
+/* ========================================= */
+/* DESIGN TOKENS: Luminous Tech-Pop          */
+/* ========================================= */
+/* Sumber tunggal palet warna untuk seluruh  */
+/* proyek. Spesifikasi lengkap: pallet.md    */
+/* Diimpor oleh style.css & style1.css.      */
+/* Jangan menyalin ulang blok ini di file    */
+/* lain - ubah di sini saja.                 */
+
+:root {
+    /* Backgrounds */
+    --bg-base: #F8FAFC;
+    --surface: #FFFFFF;
+
+    /* Brand & Accents */
+    --primary: #6366F1;
+    --primary-hover: #4F46E5;
+    --accent-energy: #EC4899;
+    --accent-fresh: #06B6D4;
+
+    /* Typography */
+    --text-main: #0F172A;
+    --text-muted: #64748B;
+
+    /* Utilities */
+    --shadow-card: 0 20px 40px rgba(15, 23, 42, 0.08);
+    --shadow-button: 0 10px 25px rgba(99, 102, 241, 0.4);
+}

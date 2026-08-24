@@ -190,47 +190,14 @@
     font-weight: 500;
 }
 
-/* --- Source Badge (YouTube / Local indicator) --- */
-.source-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 20px;
-    margin-top: 0.5rem;
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
-}
-
-.source-youtube {
-    background: rgba(236, 72, 153, 0.1);
-    color: var(--accent-energy);
-    border: 1px solid rgba(236, 72, 153, 0.2);
-}
-
-.source-local {
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--primary);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-}
+/* --- Source Badge dihapus bersama dukungan YouTube: sekarang semua lagu
+   berasal dari playlist internal, jadi penanda sumber tidak lagi berguna. --- */
 
 .progress-container {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 15px;
-    margin-bottom: 1rem;
-    width: 100%;
-}
-
-.controls-row {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
     margin-bottom: 1rem;
     width: 100%;
 }
@@ -419,11 +386,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
     .player-info h2 {
         font-size: 1.5rem;
-    }
-
-    .controls-row {
-        flex-direction: column;
-        gap: 1.5rem;
     }
 
     .volume-container {

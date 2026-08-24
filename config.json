@@ -29,18 +29,6 @@
         "albumArt": "images/ビビデバ_-_hoshimachi_suisei.jpg",
         "lyricsPath": "lyrics/ビビデバ_-_hoshimachi_suisei.lrc"
       }
-    ],
-    "YouTube Playlist": [
-      {
-        "title": "YouTube Song (Test)",
-        "artist": "YouTube Artist",
-        "youtubeId": "55moNn0leAU"
-      },
-      {
-        "title": "Sparkle - RADWIMPS",
-        "artist": "RADWIMPS",
-        "youtubeId": "a2GujJZfXpg"
-      }
     ]
   },
   "defaultPlaylist": "Playlist Utama"

@@ -82,14 +82,20 @@
         <p>© 2026 KiyoTech Corp. All Rights Reserved.</p>
     </footer>
 
-    <script> 
+    <script>
         const track = document.querySelector('.carousel-track');
         const prevBtn = document.querySelector('.carousel-btn.prev');
         const nextBtn = document.querySelector('.carousel-btn.next');
         const slides = Array.from(track.children);
-        
+
         let slideWidth = slides[0].getBoundingClientRect().width;
         let currentIndex = 0;
+
+        const moveToSlide = (index) => {
+            // Wrap-around: dari slide terakhir lanjut ke pertama, dan sebaliknya.
+            currentIndex = (index + slides.length) % slides.length;
+            track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+        };
 
         const updateCarouselDimensions = () => {
             track.style.transition = 'none';
@@ -103,20 +109,34 @@
 
         window.addEventListener('resize', updateCarouselDimensions);
         // Panggil setelah gambar selesai dimuat agar ukurannya presisi
-        window.addEventListener('load', updateCarouselDimensions); 
+        window.addEventListener('load', updateCarouselDimensions);
 
-        nextBtn.addEventListener('click', () => {
-            if (currentIndex < slides.length - 1) {
-                currentIndex++;
-                track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
-            }
+        nextBtn.addEventListener('click', () => moveToSlide(currentIndex + 1));
+        prevBtn.addEventListener('click', () => moveToSlide(currentIndex - 1));
+
+        // Navigasi keyboard
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') moveToSlide(currentIndex + 1);
+            else if (e.key === 'ArrowLeft') moveToSlide(currentIndex - 1);
         });
 
-        prevBtn.addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
-            }
+        // Geser (swipe) untuk layar sentuh
+        let touchStartX = 0;
+        let touchDeltaX = 0;
+        const SWIPE_THRESHOLD = 50; // px minimal agar dianggap swipe, bukan tap
+
+        track.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchDeltaX = 0;
+        }, { passive: true });
+
+        track.addEventListener('touchmove', (e) => {
+            touchDeltaX = e.changedTouches[0].screenX - touchStartX;
+        }, { passive: true });
+
+        track.addEventListener('touchend', () => {
+            if (Math.abs(touchDeltaX) < SWIPE_THRESHOLD) return;
+            moveToSlide(touchDeltaX < 0 ? currentIndex + 1 : currentIndex - 1);
         });
     </script>
 </body>

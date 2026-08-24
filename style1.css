@@ -1,22 +1,11 @@
+/* Palet Luminous Tech-Pop - sumber tunggal di tokens.css */
+@import url('tokens.css');
+
 /* Reset dan Dasar */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-/* CSS Variables - Luminous Tech-Pop Palette */
-:root {
-    --bg-base: #F8FAFC;
-    --surface: #FFFFFF;
-    --primary: #6366F1;
-    --primary-hover: #4F46E5;
-    --accent-energy: #EC4899;
-    --accent-fresh: #06B6D4;
-    --text-main: #0F172A;
-    --text-muted: #64748B;
-    --shadow-card: 0 20px 40px rgba(15, 23, 42, 0.08);
-    --shadow-button: 0 10px 25px rgba(99, 102, 241, 0.4);
 }
 
 body {
@@ -42,9 +31,13 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.glass-effect:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 25px 50px rgba(15, 23, 42, 0.12);
+/* Hover hanya untuk perangkat berkursor. Di layar sentuh efek
+   translateY bisa "nyangkut" setelah tap karena tidak ada mouseleave. */
+@media (hover: hover) and (pointer: fine) {
+    .glass-effect:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(15, 23, 42, 0.12);
+    }
 }
 
 /* Navigasi Minimalis (Juga diberi sedikit efek glass) */

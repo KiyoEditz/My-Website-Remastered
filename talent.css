@@ -39,11 +39,6 @@
     overflow: hidden; /* Mencegah gambar meluber keluar kotak */
 }
 
-/* Mengatur agar Trophies (atau gambar panjang) membentang penuh di layar lebar */
-.stat-full-width {
-    grid-column: 1 / -1; 
-}
-
 /* --- Styling Gambar API --- */
 .stat-card a {
     display: block;
@@ -58,18 +53,113 @@
     margin: 0 auto;
 }
 
-/* Efek sedikit membesar saat gambar disorot kursor */
-.stat-card a:hover {
-    transform: scale(1.03);
+/* Efek sedikit membesar saat gambar disorot kursor.
+   Dibatasi ke perangkat berkursor agar tidak "nyangkut" setelah tap. */
+@media (hover: hover) and (pointer: fine) {
+    .stat-card a:hover {
+        transform: scale(1.03);
+    }
+
+    .project-card:hover .project-arrow {
+        transform: translateX(4px);
+    }
+}
+
+/* ========================================= */
+/* FEATURED PROJECTS                         */
+/* ========================================= */
+.projects-section {
+    text-align: center;
+    margin-top: 3.5rem;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    text-align: left;
+}
+
+.project-card {
+    padding: 1.75rem;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.project-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.project-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.project-lang {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.lang-javascript {
+    color: #8a6d00;
+    background: rgba(240, 219, 79, 0.25);
+}
+
+.lang-python {
+    color: var(--primary-hover);
+    background: rgba(99, 102, 241, 0.12);
+}
+
+.project-desc {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    flex-grow: 1;
+}
+
+.project-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.project-stars {
+    color: var(--accent-energy);
+}
+
+.project-arrow {
+    color: var(--primary);
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
 }
 
 /* --- Responsive untuk Layar HP --- */
 @media (max-width: 768px) {
-    .stats-grid {
+    .stats-grid,
+    .projects-grid {
         grid-template-columns: 1fr; /* 1 kolom penuh di layar kecil */
     }
-    
+
     .stat-card {
         padding: 1rem;
+    }
+
+    .projects-section {
+        margin-top: 2.5rem;
     }
 }
