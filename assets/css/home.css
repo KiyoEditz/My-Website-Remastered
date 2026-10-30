@@ -1,40 +1,71 @@
-/* Import Font dari Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-
-/* Palet Luminous Tech-Pop - sumber tunggal di tokens.css */
-@import url('tokens.css');
+/* ========================================= */
+/* CSS KHUSUS HALAMAN PRANK (index.html)     */
+/* ========================================= */
 
 /* Reset dan Pengaturan Dasar */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     background-color: var(--bg-base);
     color: var(--text-main);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow-x: clip;
     position: relative;
-    background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+    background-image: radial-gradient(circle at 10% 20%, var(--primary-a05) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, var(--energy-a05) 0%, transparent 50%);
+}
+
+/* --- Aksesibilitas: halaman ini tidak memuat base.css --- */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: var(--space-4);
+    z-index: var(--z-overlay);
+    background: var(--primary);
+    color: var(--text-on-primary);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-xs);
+    text-decoration: none;
+    font-weight: 600;
+    transition: top var(--dur-fast) ease;
+}
+
+.skip-link:focus {
+    top: var(--space-2);
+}
+
+:where(a, button, [tabindex]):focus-visible {
+    outline: 2px solid var(--primary-hover);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
 }
 
 /* Kontainer Utama & Animasi Masuk */
 .container {
     text-align: center;
-    max-width: 800px;
-    width: 90%; 
-    padding: 20px 0; 
-    z-index: 2; 
+    max-width: var(--container-max);
+    width: 90%;
+    padding: var(--space-5) 0;
+    z-index: 2;
     position: relative;
-    /* Tambahan animasi agar muncul perlahan */
-    animation: fadeInUp 1s ease-out forwards;
-    opacity: 0;
-    transform: translateY(20px);
+    animation: fadeInUp var(--dur-slow) var(--ease-out) both;
 }
 
 @keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -44,56 +75,59 @@ body {
 .chrome-logo {
     width: 80px;
     height: 80px;
-    margin-bottom: 24px;
-    border-radius: 50%;
+    margin-bottom: var(--space-6);
+    border-radius: var(--radius-circle);
     box-shadow: var(--shadow-button);
-    transition: transform 0.3s ease;
+    transition: transform var(--dur-base) ease;
 }
 
 .chrome-logo:hover {
-    transform: scale(1.05); /* Sedikit membesar saat disorot */
+    transform: scale(1.05);
 }
 
 header h1 {
-    font-size: 3rem;
+    font-size: var(--fs-3xl);
     font-weight: 700;
     margin: 0;
     color: var(--text-main);
     letter-spacing: -1px;
+    line-height: var(--lh-tight);
 }
 
 header p {
-    font-size: 1.2rem;
+    font-size: var(--fs-md);
     color: var(--text-muted);
-    margin-top: 8px;
-    margin-bottom: 24px;
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-6);
 }
 
 .highlight-text {
     background: linear-gradient(135deg, var(--primary), var(--accent-energy));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    color: var(--primary);
 }
 
 .badge {
-    background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(99, 102, 241, 0.1));
+    background: linear-gradient(135deg, var(--energy-a10), var(--primary-a10));
     color: var(--accent-energy);
-    padding: 8px 16px;
-    border-radius: 30px;
-    font-size: 0.9rem;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-sm);
     font-weight: 700;
-    margin: 0 auto 24px auto;
-    border: 1px solid rgba(236, 72, 153, 0.2);
+    margin: 0 auto var(--space-6) auto;
+    border: 1px solid var(--energy-a20);
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-2);
 }
 
 .badge span {
     background: var(--accent-energy);
-    color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
+    color: var(--text-on-primary);
+    padding: 2px var(--space-2);
+    border-radius: var(--radius-sm);
     font-size: 0.75rem;
 }
 
@@ -101,82 +135,82 @@ header p {
 .features {
     display: flex;
     justify-content: space-between;
-    gap: 20px;
-    margin-top: 40px;
+    gap: var(--space-5);
+    margin-top: var(--space-10);
 }
 
 .feature-card {
     background-color: var(--surface);
-    border-radius: 16px;
-    padding: 24px;
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
     flex: 1;
     min-width: 200px;
-    border: 1px solid rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--ink-a03);
     box-shadow: var(--shadow-card);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform var(--dur-base) ease, box-shadow var(--dur-base) ease;
 }
 
 .feature-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 25px 50px rgba(15, 23, 42, 0.12);
+    box-shadow: var(--shadow-card-hover);
 }
 
 .feature-card .icon-placeholder {
     width: 48px;
     height: 48px;
-    border-radius: 50%;
-    margin: 0 auto 16px auto;
+    border-radius: var(--radius-circle);
+    margin: 0 auto var(--space-4) auto;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .bg-pink {
-    background-color: rgba(236, 72, 153, 0.1);
+    background-color: var(--energy-a10);
     color: var(--accent-energy);
 }
 
 .bg-cyan {
-    background-color: rgba(6, 182, 212, 0.1);
+    background-color: var(--fresh-a10);
     color: var(--accent-fresh);
 }
 
 .bg-indigo {
-    background-color: rgba(99, 102, 241, 0.1);
+    background-color: var(--primary-a10);
     color: var(--primary);
 }
 
 .feature-card h3 {
-    margin: 0 0 8px 0;
-    font-size: 1rem;
+    margin: 0 0 var(--space-2) 0;
+    font-size: var(--fs-base);
     font-weight: 600;
     color: var(--text-main);
 }
 
 .feature-card p {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: var(--fs-sm);
     color: var(--text-muted);
     line-height: 1.5;
 }
 
 /* Footer (Notifikasi dan Tombol) */
 footer {
-    margin-top: 40px;
+    margin-top: var(--space-10);
 }
 
 .notification {
-    background-color: rgba(236, 72, 153, 0.1);
-    border: 1px solid rgba(236, 72, 153, 0.2);
-    padding: 12px 20px;
-    border-radius: 8px;
+    background-color: var(--energy-a10);
+    border: 1px solid var(--energy-a20);
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-xs);
     display: inline-block;
     max-width: 70%;
-    margin: 0 auto 30px auto;
+    margin: 0 auto var(--space-8) auto;
 }
 
 .notification p {
-    font-size: 0.8rem;
+    font-size: var(--fs-xs);
     margin: 0;
     line-height: 1.4;
     color: var(--accent-energy);
@@ -185,20 +219,21 @@ footer {
 .buttons {
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: var(--space-3);
 }
 
 .btn {
-    display: inline-block; 
+    display: inline-block;
     border: none;
-    padding: 10px 24px;
-    border-radius: 30px;
-    font-size: 0.9rem;
+    padding: 10px var(--space-6);
+    border-radius: var(--radius-pill);
+    font-family: inherit;
+    font-size: var(--fs-sm);
     font-weight: 500;
     cursor: pointer;
     text-align: center;
-    text-decoration: none; 
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    transition: background-color var(--dur-base) ease, transform var(--dur-fast) ease, box-shadow var(--dur-base) ease;
 }
 
 .btn:active {
@@ -207,14 +242,14 @@ footer {
 
 .btn-primary {
     background-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     box-shadow: var(--shadow-button);
 }
 
 .btn-primary:hover {
     background-color: var(--primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.5);
+    box-shadow: var(--shadow-button-hover);
 }
 
 .btn-secondary {
@@ -225,7 +260,7 @@ footer {
 
 .btn-secondary:hover {
     background-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
 }
 
 /* --- Bagian Animasi Latar Belakang --- */
@@ -235,29 +270,119 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; 
+    z-index: 1;
     overflow: hidden;
+    pointer-events: none;
 }
 
 .shape {
     position: absolute;
-    border-radius: 50%; 
+    border-radius: var(--radius-circle);
     animation: float 20s ease-in-out infinite alternate;
     opacity: 0.6;
 }
 
 @keyframes float {
-    0% { transform: translateY(20px) translateX(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) translateX(20px) rotate(180deg); }
-    100% { transform: translateY(20px) translateX(0px) rotate(360deg); }
+    0% {
+        transform: translateY(20px) translateX(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-20px) translateX(20px) rotate(180deg);
+    }
+
+    100% {
+        transform: translateY(20px) translateX(0px) rotate(360deg);
+    }
 }
 
-.shape1 { width: 120px; height: 120px; background: radial-gradient(circle, var(--primary), transparent); top: 10%; left: 5%; animation-duration: 25s; animation-delay: -5s; filter: blur(40px); }
-.shape2 { width: 80px; height: 80px; background: radial-gradient(circle, var(--accent-energy), transparent); top: 20%; right: 10%; animation-duration: 30s; filter: blur(30px); }
-.shape3 { width: 100px; height: 100px; background: radial-gradient(circle, var(--accent-fresh), transparent); bottom: 15%; right: 15%; animation-duration: 22s; animation-delay: -10s; filter: blur(40px); }
-.shape4 { width: 60px; height: 60px; background: radial-gradient(circle, var(--primary), transparent); top: 15%; left: 25%; animation-duration: 35s; filter: blur(25px); }
-.shape5 { width: 40px; height: 40px; background: radial-gradient(circle, var(--accent-fresh), transparent); bottom: 25%; left: 10%; animation-duration: 18s; filter: blur(20px); }
-.shape6 { width: 200px; height: 200px; background: radial-gradient(circle, var(--primary), transparent); bottom: -10%; left: 30%; animation-duration: 40s; animation-delay: -15s; filter: blur(60px); opacity: 0.3; }
+.shape1 {
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, var(--primary), transparent);
+    top: 10%;
+    left: 5%;
+    animation-duration: 25s;
+    animation-delay: -5s;
+    filter: blur(40px);
+}
+
+.shape2 {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, var(--accent-energy), transparent);
+    top: 20%;
+    right: 10%;
+    animation-duration: 30s;
+    filter: blur(30px);
+}
+
+.shape3 {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, var(--accent-fresh), transparent);
+    bottom: 15%;
+    right: 15%;
+    animation-duration: 22s;
+    animation-delay: -10s;
+    filter: blur(40px);
+}
+
+.shape4 {
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, var(--primary), transparent);
+    top: 15%;
+    left: 25%;
+    animation-duration: 35s;
+    filter: blur(25px);
+}
+
+.shape5 {
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, var(--accent-fresh), transparent);
+    bottom: 25%;
+    left: 10%;
+    animation-duration: 18s;
+    filter: blur(20px);
+}
+
+.shape6 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--primary), transparent);
+    bottom: -10%;
+    left: 30%;
+    animation-duration: 40s;
+    animation-delay: -15s;
+    filter: blur(60px);
+    opacity: 0.3;
+}
+
+/* --- Aksesibilitas --- */
+:where(a, button, input, select, [tabindex]):focus-visible {
+    outline: 2px solid var(--primary-hover);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .container {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
 
 /* ================================================= */
 /* ---        Responsive Design for Mobile       --- */
@@ -267,46 +392,47 @@ footer {
     body {
         height: auto;
         min-height: 100vh;
-        align-items: flex-start; 
-        padding-top: 5vh; 
+        align-items: flex-start;
+        padding-top: 5vh;
     }
 
     header h1 {
-        font-size: 2rem; 
+        font-size: var(--fs-3xl);
     }
 
     header p {
-        font-size: 1rem; 
+        font-size: var(--fs-base);
     }
 
     .features {
-        flex-direction: column; 
-        align-items: center; 
+        flex-direction: column;
+        align-items: center;
     }
 
     .feature-card {
-        min-width: 0; 
-        width: 100%; 
-        max-width: 320px; 
+        min-width: 0;
+        width: 100%;
+        max-width: 320px;
     }
 
     .notification {
-        max-width: 90%; 
+        max-width: 90%;
     }
 
     .buttons {
-        flex-direction: column-reverse; 
-        align-items: center; 
-        gap: 16px;
-    }
-    
-    .buttons button, .buttons a {
-        width: 100%; 
-        max-width: 280px;
-        box-sizing: border-box; /* Memastikan padding tidak membuat tombol melebih container */
+        flex-direction: column-reverse;
+        align-items: center;
+        gap: var(--space-4);
     }
 
-    .shape1, .shape6 {
+    .buttons button,
+    .buttons a {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .shape1,
+    .shape6 {
         display: none;
     }
 }

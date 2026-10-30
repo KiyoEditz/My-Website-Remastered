@@ -2,59 +2,49 @@
 /* CSS KHUSUS UNTUK HALAMAN TALENT/STATS     */
 /* ========================================= */
 
+/* .section-title / .section-subtitle ada di base.css */
+
 .talent-section {
     text-align: center;
-    padding-top: 1rem;
-}
-
-.section-title {
-    font-size: 2rem;
-    color: var(--text-main);
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-.section-subtitle {
-    color: var(--text-muted);
-    margin-bottom: 2.5rem;
-    font-size: 1rem;
+    padding-top: var(--space-4);
 }
 
 /* --- Grid System untuk Widget --- */
 .stats-grid {
     display: grid;
-    /* Grid otomatis: Card minimal selebar 300px, maksimal mengisi sisa ruang */
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 1.5rem;
-    align-items: center; /* Memusatkan konten secara vertikal */
+    /* min() mencegah track lebih lebar dari viewport 320px */
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    gap: var(--space-6);
+    align-items: center;
 }
 
 /* --- Container untuk masing-masing API --- */
 .stat-card {
-    padding: 1.5rem;
-    border-radius: 16px;
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Mencegah gambar meluber keluar kotak */
+    overflow: hidden;
+    /* Menahan tinggi supaya permintaan pihak ketiga yang lambat
+       tidak membuat grid melompat */
+    min-height: 200px;
 }
 
 /* --- Styling Gambar API --- */
 .stat-card a {
     display: block;
     width: 100%;
-    transition: transform 0.3s ease;
+    transition: transform var(--dur-base) ease;
 }
 
 .stat-card img {
-    max-width: 100%; /* Memastikan gambar tidak lebih lebar dari kontainer */
+    max-width: 100%;
     height: auto;
     display: block;
     margin: 0 auto;
 }
 
-/* Efek sedikit membesar saat gambar disorot kursor.
-   Dibatasi ke perangkat berkursor agar tidak "nyangkut" setelah tap. */
 @media (hover: hover) and (pointer: fine) {
     .stat-card a:hover {
         transform: scale(1.03);
@@ -70,22 +60,22 @@
 /* ========================================= */
 .projects-section {
     text-align: center;
-    margin-top: 3.5rem;
+    margin-top: var(--space-12);
 }
 
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    gap: var(--space-6);
     text-align: left;
 }
 
 .project-card {
-    padding: 1.75rem;
-    border-radius: 16px;
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--space-3);
     text-decoration: none;
     color: inherit;
 }
@@ -94,11 +84,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-4);
 }
 
 .project-name {
-    font-size: 1.2rem;
+    font-size: var(--fs-md);
     font-weight: 700;
     color: var(--text-main);
 }
@@ -106,19 +96,19 @@
 .project-lang {
     font-size: 0.75rem;
     font-weight: 600;
-    padding: 0.25rem 0.7rem;
-    border-radius: 999px;
+    padding: var(--space-1) 0.7rem;
+    border-radius: var(--radius-pill);
     white-space: nowrap;
 }
 
 .lang-javascript {
     color: #8a6d00;
-    background: rgba(240, 219, 79, 0.25);
+    background: rgb(240 219 79 / .25);
 }
 
 .lang-python {
     color: var(--primary-hover);
-    background: rgba(99, 102, 241, 0.12);
+    background: var(--primary-a12);
 }
 
 .project-desc {
@@ -132,7 +122,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 0.5rem;
+    margin-top: var(--space-2);
+    min-height: 1.5rem;
+    /* baris selalu dipesan */
     color: var(--text-muted);
     font-size: 0.9rem;
     font-weight: 600;
@@ -140,26 +132,44 @@
 
 .project-stars {
     color: var(--accent-energy);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* Angka dari GitHub API: lebar dikunci agar 33 -> 1 tidak
+   menggeser tata letak kartu */
+.project-meta .num {
+    display: inline-block;
+    min-inline-size: 2ch;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+/* Selama data masih diambil, angka fallback diredupkan */
+.project-card[aria-busy="true"] .project-stars {
+    opacity: 0.55;
 }
 
 .project-arrow {
-    color: var(--primary);
+    color: var(--text-link);
     font-size: 1.2rem;
-    transition: transform 0.3s ease;
+    transition: transform var(--dur-base) ease;
 }
 
 /* --- Responsive untuk Layar HP --- */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
+
     .stats-grid,
     .projects-grid {
-        grid-template-columns: 1fr; /* 1 kolom penuh di layar kecil */
+        grid-template-columns: 1fr;
     }
 
     .stat-card {
-        padding: 1rem;
+        padding: var(--space-4);
     }
 
     .projects-section {
-        margin-top: 2.5rem;
+        margin-top: var(--space-10);
     }
 }

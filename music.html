@@ -4,59 +4,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="thumbnail.jpg?v=2" sizes="32x32" type="image/png">
-    <link rel="stylesheet" href="style1.css">
-    <link rel="stylesheet" href="music.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#F8FAFC">
+    <meta name="description" content="Pemutar musik pribadi Abi Andriansyah dengan lirik tersinkron.">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" href="assets/img/favicon/favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="assets/img/favicon/apple-touch-icon.png">
+    <link rel="stylesheet" href="assets/css/tokens.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/music.css">
     <title>Music | Abi Andriansyah</title>
 </head>
 
 <body>
 
-    <div class="background-blur" id="backgroundBlur"></div>
+    <!-- Sprite ikon: menggantikan Font Awesome (~100 KB CSS + font) -->
+    <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="i-headphones" viewBox="0 0 24 24">
+            <path d="M12 3a9 9 0 0 0-9 9v7a2 2 0 0 0 2 2h3v-8H5v-1a7 7 0 0 1 14 0v1h-3v8h3a2 2 0 0 0 2-2v-7a9 9 0 0 0-9-9z" />
+        </symbol>
+        <symbol id="i-list" viewBox="0 0 24 24">
+            <path d="M4 6h2v2H4zm4 0h12v2H8zM4 11h2v2H4zm4 0h12v2H8zM4 16h2v2H4zm4 0h12v2H8z" />
+        </symbol>
+        <symbol id="i-music" viewBox="0 0 24 24">
+            <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3z" />
+        </symbol>
+        <symbol id="i-prev" viewBox="0 0 24 24">
+            <path d="M6 5h2v14H6zm12 0v14l-9-7z" />
+        </symbol>
+        <symbol id="i-play" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
+        </symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24">
+            <path d="M6 5h4v14H6zm8 0h4v14h-4z" />
+        </symbol>
+        <symbol id="i-next" viewBox="0 0 24 24">
+            <path d="M16 5h2v14h-2zM6 5l9 7-9 7z" />
+        </symbol>
+        <symbol id="i-volume" viewBox="0 0 24 24">
+            <path d="M3 9v6h4l5 4V5L7 9zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z" />
+        </symbol>
+        <symbol id="i-volume-mute" viewBox="0 0 24 24">
+            <path d="M3 9v6h4l5 4V5L7 9zM22.3 9.4l-1.4-1.4-2.4 2.4-2.4-2.4-1.4 1.4 2.4 2.4-2.4 2.4 1.4 1.4 2.4-2.4 2.4 2.4 1.4-1.4-2.4-2.4z" />
+        </symbol>
+    </svg>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <span class="logo">KiyoEditz.</span>
-            <ul class="nav-links">
-                <li><a href="index1.html">Profile</a></li>
-                <li><a href="galeri.html">Galeri</a></li>
-                <li><a href="music.html" class="active">Music</a></li>
-                <li><a href="talent.html">Talent</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+    <div class="background-blur" id="backgroundBlur" aria-hidden="true"></div>
 
-    <div class="welcome-panel" id="welcomePanel">
+    <a class="skip-link" href="#main">Langsung ke konten</a>
+
+    <header class="site-header">
+        <!-- KEEP IN SYNC: profil/galeri/music/talent/contact -->
+        <nav class="navbar" aria-label="Navigasi utama">
+            <div class="nav-container">
+                <span class="logo">KiyoEditz.</span>
+                <ul class="nav-links">
+                    <li><a href="profil.html">Profile</a></li>
+                    <li><a href="galeri.html">Galeri</a></li>
+                    <li><a href="music.html" class="active" aria-current="page">Music</a></li>
+                    <li><a href="talent.html">Talent</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="welcome-panel" id="welcomePanel" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle"
+        aria-describedby="welcomeDesc">
         <div class="welcome-content glass-effect">
-            <i class="fas fa-headphones-alt" style="font-size: 3rem; color: #005f73; margin-bottom: 1rem;"></i>
-            <h2>Siap Mendengarkan?</h2>
-            <p>Gunakan headphone untuk pengalaman terbaik.</p>
-            <button id="startButton" class="action-btn">Mulai Putar</button>
+            <svg class="icon welcome-icon" aria-hidden="true"><use href="#i-headphones" /></svg>
+            <h2 id="welcomeTitle">Siap Mendengarkan?</h2>
+            <p id="welcomeDesc">Gunakan headphone untuk pengalaman terbaik. Audio tidak diputar otomatis — tekan
+                tombol putar saat kamu sudah siap.</p>
+            <button id="startButton" class="action-btn" type="button">Buka Pemutar</button>
         </div>
     </div>
 
-    <main class="container">
+    <main class="container" id="main" tabindex="-1">
         <section class="player-container glass-effect fade-in">
 
             <div class="player-header">
                 <div class="header-title-wrapper">
-                    <i class="fas fa-list-ul header-icon"></i>
-                    <h1 id="playlistTitle" class="highlight-text" style="font-size: 1.8rem; margin:0;">Playlist</h1>
+                    <svg class="icon header-icon" aria-hidden="true"><use href="#i-list" /></svg>
+                    <h1 id="playlistTitle" class="highlight-text playlist-title">Playlist</h1>
                 </div>
                 <div class="playlist-selector">
                     <div class="select-wrapper">
-                        <i class="fas fa-music select-icon"></i>
-                        <select id="playlistSelect" class="glass-select custom-pill-select"></select>
+                        <svg class="icon select-icon" aria-hidden="true"><use href="#i-music" /></svg>
+                        <select id="playlistSelect" class="glass-select custom-pill-select"
+                            aria-label="Pilih playlist"></select>
                     </div>
                 </div>
             </div>
 
             <div class="player-layout">
                 <div class="album-art-wrapper">
-                    <img id="albumArt" src="thumbnail.jpg" alt="Album Art">
+                    <img id="albumArt" src="assets/img/brand/logo-160.webp" width="300" height="300"
+                        alt="Sampul album" decoding="async">
                 </div>
 
                 <div class="player-controls-wrapper">
@@ -68,24 +111,36 @@
 
                     <div class="progress-container">
                         <span id="currentTime">0:00</span>
-                        <input type="range" id="progressBar" min="0" max="100" value="0">
+                        <input type="range" id="progressBar" min="0" max="100" value="0"
+                            aria-label="Posisi lagu">
                         <span id="duration">0:00</span>
                     </div>
 
                     <div class="controls">
-                        <button id="prevBtn" class="control-btn"><i class="fas fa-backward"></i></button>
-                        <button id="playPauseBtn" class="control-btn play-btn"><i class="fas fa-play"></i></button>
-                        <button id="nextBtn" class="control-btn"><i class="fas fa-forward"></i></button>
+                        <button id="prevBtn" class="control-btn" type="button" aria-label="Lagu sebelumnya">
+                            <svg class="icon" aria-hidden="true"><use href="#i-prev" /></svg>
+                        </button>
+                        <button id="playPauseBtn" class="control-btn play-btn" type="button" aria-label="Putar">
+                            <svg class="icon" aria-hidden="true"><use href="#i-play" /></svg>
+                        </button>
+                        <button id="nextBtn" class="control-btn" type="button" aria-label="Lagu berikutnya">
+                            <svg class="icon" aria-hidden="true"><use href="#i-next" /></svg>
+                        </button>
                     </div>
 
                     <div class="volume-container">
-                        <i class="fas fa-volume-up"></i>
-                        <input type="range" id="volumeBar" min="0" max="100" value="30">
+                        <button id="muteBtn" class="volume-btn" type="button" aria-label="Bisukan"
+                            aria-pressed="false">
+                            <svg class="icon" aria-hidden="true"><use href="#i-volume" /></svg>
+                        </button>
+                        <input type="range" id="volumeBar" min="0" max="100" value="30" aria-label="Volume">
+                        <output id="volumeValue" class="volume-value" for="volumeBar">30%</output>
                     </div>
 
                     <div class="lyrics-container">
                         <div class="lyrics-scroll">
-                            <p id="currentLyric" class="active-lyric">Lirik akan muncul di sini</p>
+                            <p id="currentLyric" class="active-lyric" aria-live="polite" aria-atomic="true">Lirik
+                                akan muncul di sini</p>
                             <p id="nextLyric" class="upcoming-lyric"></p>
                             <p id="futureLyric" class="upcoming-lyric"></p>
                         </div>
@@ -96,9 +151,21 @@
         </section>
     </main>
 
+    <footer class="footer fade-in delay-1">
+        <div class="social-links">
+            <a href="https://www.instagram.com/kiyoeditz" class="social-btn" target="_blank"
+                rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.facebook.com/profile.php?id=100077102250480&amp;mibextid=ZbWKwL"
+                class="social-btn" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://discord.com/users/813365850979041302" class="social-btn" target="_blank"
+                rel="noopener noreferrer">Discord</a>
+        </div>
+        <p>© 2026 KiyoTech Corp. All Rights Reserved.</p>
+    </footer>
+
     <audio id="audio"></audio>
 
-    <script src="script.js"></script>
+    <script src="assets/js/music-player.js" defer></script>
 </body>
 
 </html>

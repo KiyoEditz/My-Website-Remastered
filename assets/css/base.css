@@ -1,34 +1,110 @@
-/* Palet Luminous Tech-Pop - sumber tunggal di tokens.css */
-@import url('tokens.css');
+/* ========================================= */
+/* BASE: kerangka bersama semua halaman      */
+/* (reset, navbar, container, footer, kartu) */
+/* ========================================= */
+
+/* --- Font: Inter variable, di-host sendiri --- */
+/* Satu file untuk bobot 400-800. Subset latin + latin-ext saja.
+   Tanpa ini halaman memanggil Google Fonts (render-blocking + CSP). */
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400 800;
+    font-display: swap;
+    src: url('../fonts/inter-latin-ext.woff2') format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400 800;
+    font-display: swap;
+    src: url('../fonts/inter-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 /* Reset dan Dasar */
-* {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    /* clip (bukan hidden) agar position: sticky di navbar tetap bekerja */
+    overflow-x: clip;
+}
+
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-sans);
     background-color: var(--bg-base);
     color: var(--text-main);
-    line-height: 1.6;
+    line-height: var(--lh-base);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+    background-image: radial-gradient(circle at 10% 20%, var(--primary-a05) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, var(--energy-a05, rgb(var(--energy-rgb) / .05)) 0%, transparent 50%);
     background-attachment: fixed;
+}
+
+img,
+svg {
+    max-width: 100%;
+}
+
+/* --- Aksesibilitas dasar --- */
+
+/* Hanya tampil saat difokus dengan keyboard. */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: var(--space-4);
+    z-index: var(--z-overlay);
+    background: var(--primary);
+    color: var(--text-on-primary);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-xs);
+    text-decoration: none;
+    font-weight: 600;
+    transition: top var(--dur-fast) ease;
+}
+
+.skip-link:focus {
+    top: var(--space-2);
+}
+
+:where(a, button, input, select, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--primary-hover);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+}
+
+/* Wadah sprite SVG: hanya definisi <symbol>, tidak pernah tampil. */
+.icon-sprite {
+    display: none;
+}
+
+/* Ikon SVG inline menggantikan Font Awesome. */
+.icon {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: -0.125em;
 }
 
 /* --- KELAS UTAMA UNTUK EFEK GLASS --- */
 .glass-effect {
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--glass-bg);
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-card);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform var(--dur-base) ease, box-shadow var(--dur-base) ease;
 }
 
 /* Hover hanya untuk perangkat berkursor. Di layar sentuh efek
@@ -36,34 +112,37 @@ body {
 @media (hover: hover) and (pointer: fine) {
     .glass-effect:hover {
         transform: translateY(-5px);
-        box-shadow: 0 25px 50px rgba(15, 23, 42, 0.12);
+        box-shadow: var(--shadow-card-hover);
     }
 }
 
-/* Navigasi Minimalis (Juga diberi sedikit efek glass) */
+/* --- Navigasi --- */
 .navbar {
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--glass-bg-strong);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--glass-border);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: var(--z-nav);
 }
 
 .nav-container {
-    max-width: 900px;
+    max-width: var(--container-max);
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--container-pad);
 }
 
 .logo {
     font-weight: 800;
-    font-size: 1.5rem;
+    font-size: var(--fs-lg);
     color: var(--text-main);
     letter-spacing: -0.5px;
+    white-space: nowrap;
 }
 
 .logo span {
@@ -73,7 +152,7 @@ body {
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 2rem;
+    gap: var(--space-8);
 }
 
 .nav-links a {
@@ -81,66 +160,113 @@ body {
     color: var(--text-muted);
     font-size: 0.95rem;
     font-weight: 600;
-    transition: color 0.2s;
+    transition: color var(--dur-fast) ease;
     position: relative;
+    white-space: nowrap;
 }
 
-/* Aksen warna saat hover */
+/* Aksen warna saat hover - --text-link agar kontras teks lolos AA */
 .nav-links a:hover,
 .nav-links a.active {
-    color: var(--primary);
+    color: var(--text-link);
 }
 
-/* Kontainer Utama */
+/* --- Header situs (pembungkus navbar) --- */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-nav);
+}
+
+/* --- Kontainer Utama --- */
 .container {
-    max-width: 800px;
-    margin: 4rem auto;
-    padding: 0 2rem;
+    width: 100%;
+    max-width: var(--container-max);
+    margin: clamp(2rem, 6vw, 4rem) auto;
+    padding: 0 var(--container-pad);
     flex: 1;
 }
 
-/* Bagian CV / Header */
-/* Menambahkan class glass-effect di sini */
+/* Varian lebar untuk grid masonry galeri. Nav ikut dilebarkan agar
+   tepinya tetap sejajar dengan konten (lihat .site-header--wide). */
+.container--wide {
+    max-width: var(--container-max-wide);
+}
+
+.site-header--wide .nav-container {
+    max-width: var(--container-max-wide);
+}
+
+/* --- Judul bagian (dipakai galeri/talent/contact/404) --- */
+.section-title {
+    font-size: var(--fs-xl);
+    color: var(--text-main);
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+    line-height: var(--lh-tight);
+}
+
+.section-subtitle {
+    color: var(--text-muted);
+    margin-bottom: var(--space-10);
+    font-size: var(--fs-base);
+}
+
+/* --- Panel 404 --- */
+.error-panel {
+    padding: var(--space-12) var(--space-8);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.error-actions {
+    margin-top: var(--space-8);
+}
+
+/* --- Header CV / Profil --- */
 .cv-header {
     display: flex;
     align-items: center;
-    gap: 2rem;
-    padding: 2.5rem;
-    border-radius: 20px;
-    /* Radius lebih tumpul agar terlihat modern */
+    gap: var(--space-8);
+    padding: var(--space-10);
+    border-radius: var(--radius-lg);
 }
 
 .profile-img {
     width: 120px;
     height: 120px;
-    border-radius: 50%;
+    flex-shrink: 0;
+    border-radius: var(--radius-circle);
     object-fit: cover;
     border: 4px solid var(--surface);
     box-shadow: var(--shadow-button);
 }
 
 .profile-info h1 {
-    font-size: 2.2rem;
+    font-size: var(--fs-2xl);
     font-weight: 700;
     color: var(--text-main);
-    margin-bottom: 0.2rem;
+    margin-bottom: var(--space-1);
     letter-spacing: -0.5px;
+    line-height: var(--lh-tight);
 }
 
 .role {
-    font-size: 1.1rem;
+    font-size: var(--fs-md);
     font-weight: 400;
     color: var(--accent-fresh);
-    margin-bottom: 1.2rem;
+    margin-bottom: var(--space-5);
 }
 
 .highlight-text {
     background: linear-gradient(135deg, var(--primary), var(--accent-energy));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    color: var(--primary);
 }
 
-/* Keahlian (Skills Badges) */
+/* --- Keahlian (Skills Badges) --- */
 .skills-container {
     display: flex;
     flex-wrap: wrap;
@@ -148,42 +274,41 @@ body {
 }
 
 .skill-badge {
-    background-color: rgba(99, 102, 241, 0.1);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    color: var(--primary);
-    font-size: 0.85rem;
-    padding: 0.5rem 1rem;
-    border-radius: 30px;
+    background-color: var(--primary-a10);
+    border: 1px solid var(--primary-a20);
+    color: var(--text-link);
+    font-size: var(--fs-sm);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-pill);
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: color var(--dur-base) ease, background-color var(--dur-base) ease, border-color var(--dur-base) ease;
 }
 
 .skill-badge:hover {
     background-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     border-color: var(--primary);
 }
 
-/* Quotes Section */
+/* --- Bagian Kutipan --- */
 .quotes-section {
-    margin-top: 3rem;
+    margin-top: var(--space-12);
     text-align: center;
 }
 
-/* Menambahkan class glass-effect di sini */
 .quote-box {
-    padding: 2.5rem;
-    border-radius: 16px;
+    padding: var(--space-10);
+    border-radius: var(--radius-md);
     border-left: 4px solid var(--accent-energy);
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-8);
     text-align: left;
 }
 
 .typing-container {
-    font-size: 1.1rem;
+    font-size: var(--fs-md);
     color: var(--text-main);
     min-height: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-4);
     font-weight: 500;
 }
 
@@ -193,18 +318,18 @@ body {
     font-weight: 400;
 }
 
-/* Tombol Aksi */
+/* --- Tombol Aksi --- */
 .action-btn {
     display: inline-block;
     text-decoration: none;
-    color: #fff;
+    color: var(--text-on-primary);
     background-color: var(--primary);
     padding: 0.8rem 2rem;
-    border-radius: 50px;
-    font-size: 1rem;
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-base);
     font-weight: 600;
     box-shadow: var(--shadow-button);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    transition: transform var(--dur-fast) ease, box-shadow var(--dur-fast) ease, background-color var(--dur-fast) ease;
     cursor: pointer;
     border: none;
 }
@@ -212,81 +337,112 @@ body {
 .action-btn:hover {
     background-color: var(--primary-hover);
     transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.5);
+    box-shadow: var(--shadow-button-hover);
 }
 
-/* Footer Minimalis */
+/* --- Halaman 404 --- */
+.error-panel {
+    padding: var(--space-12) var(--space-8);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.error-actions {
+    margin-top: var(--space-8);
+}
+
+/* --- Footer --- */
 .footer {
     text-align: center;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.9);
+    padding: var(--space-8);
+    background: var(--glass-bg-strong);
     backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--glass-border);
     margin-top: auto;
 }
 
 .social-links {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    margin-bottom: var(--space-4);
 }
 
 .social-btn {
     text-decoration: none;
     color: var(--text-muted);
-    font-size: 0.95rem;
+    font-size: var(--fs-sm);
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: color var(--dur-base) ease;
 }
 
 .social-btn:hover {
-    color: var(--primary);
+    color: var(--text-link);
 }
 
 .footer p {
-    font-size: 0.85rem;
+    font-size: var(--fs-xs);
     color: var(--text-muted);
 }
 
 /* ========================================= */
-/* ANIMASI HALUS               */
+/* ANIMASI HALUS                             */
 /* ========================================= */
+/* Pola dibalik: elemen TIDAK dimulai dari opacity 0, jadi kalau
+   animasi gagal/dimatikan kontennya tetap terlihat. */
 .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    /* Jarak muncul lebih jauh */
-    animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: fadeInUp var(--dur-slow) var(--ease-out) both;
 }
 
 .delay-1 {
-    animation-delay: 0.3s;
+    animation-delay: 300ms;
 }
 
 .delay-2 {
-    animation-delay: 0.6s;
+    animation-delay: 600ms;
 }
 
 @keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-/* ========================================= */
-/* RESPONSIVE                  */
-/* ========================================= */
-@media (max-width: 768px) {
-    .container {
-        padding: 0 1rem;
-        margin: 2rem auto;
+/* Hormati preferensi sistem: matikan animasi dan pastikan terlihat. */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 
+    .fade-in {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* ========================================= */
+/* RESPONSIVE                                */
+/* ========================================= */
+@media (max-width: 767px) {
     .cv-header {
         flex-direction: column;
         text-align: center;
-        padding: 2rem;
+        padding: var(--space-8);
     }
 
     .profile-img {
@@ -300,17 +456,26 @@ body {
 
     .nav-container {
         flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
+        gap: var(--space-3);
+        padding: var(--space-3) var(--container-pad);
     }
 
+    /* Satu baris yang bisa digeser, bukan dua baris yang menutupi layar */
     .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
+        width: 100%;
+        justify-content: flex-start;
+        gap: var(--space-5);
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 2px;
+    }
+
+    .nav-links::-webkit-scrollbar {
+        display: none;
     }
 
     .quote-box {
-        padding: 1.5rem;
+        padding: var(--space-6);
     }
 }

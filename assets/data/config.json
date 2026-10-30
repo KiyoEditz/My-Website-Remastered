@@ -4,30 +4,30 @@
       {
         "title": "五等分の未来",
         "artist": "Nakanoke no Itsutsugo",
-        "path": "music/song1.mp3",
-        "albumArt": "images/album1.jpg",
-        "lyricsPath": "lyrics/song1.lrc"
+        "path": "assets/audio/song1.mp3",
+        "albumArt": "assets/img/covers/album1.webp",
+        "lyricsPath": "assets/lyrics/song1.lrc"
       },
       {
         "title": "五等分の気持ち",
         "artist": "Nakanoke no Itsutsugo",
-        "path": "music/song2.mp3",
-        "albumArt": "images/album2.jpg",
-        "lyricsPath": "lyrics/song2.lrc"
+        "path": "assets/audio/song2.mp3",
+        "albumArt": "assets/img/covers/album2.webp",
+        "lyricsPath": "assets/lyrics/song2.lrc"
       },
       {
         "title": "The Vampire",
         "artist": "DECO*27",
-        "path": "music/the_vampire_-_deco_27.mp3",
-        "albumArt": "images/the_vampire_-_deco_27.jpg",
-        "lyricsPath": "lyrics/the_vampire_-_deco_27.lrc"
+        "path": "assets/audio/the-vampire.mp3",
+        "albumArt": "assets/img/covers/the-vampire.webp",
+        "lyricsPath": "assets/lyrics/the-vampire.lrc"
       },
       {
         "title": "ビビデバ",
         "artist": "Hoshimachi Suisei",
-        "path": "music/ビビデバ_-_hoshimachi_suisei.mp3",
-        "albumArt": "images/ビビデバ_-_hoshimachi_suisei.jpg",
-        "lyricsPath": "lyrics/ビビデバ_-_hoshimachi_suisei.lrc"
+        "path": "assets/audio/bibideba.mp3",
+        "albumArt": "assets/img/covers/bibideba.webp",
+        "lyricsPath": "assets/lyrics/bibideba.lrc"
       }
     ]
   },

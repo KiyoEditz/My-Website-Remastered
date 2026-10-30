@@ -3,28 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="thumbnail.jpg?v=2" sizes="32x32" type="image/png">
-    <link rel="stylesheet" href="style1.css">
-    <link rel="stylesheet" href="talent.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#F8FAFC">
+    <meta name="description" content="Statistik GitHub dan proyek unggulan Abi Andriansyah (KiyoEditz).">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" href="assets/img/favicon/favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="assets/img/favicon/apple-touch-icon.png">
+    <link rel="stylesheet" href="assets/css/tokens.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/talent.css">
     <title>Talent | Abi Andriansyah</title>
 </head>
 <body>
-    
-    <nav class="navbar">
-        <div class="nav-container">
-            <span class="logo">KiyoEditz.</span>
-            <ul class="nav-links">
-                <li><a href="index1.html">Profile</a></li>
-                <li><a href="galeri.html">Galeri</a></li>
-                <li><a href="music.html">Music</a></li>
-                <li><a href="talent.html" class="active">Talent</a></li>
-                <li><a href="contact.html">Contact</a></li>   
-            </ul>
-        </div>
-    </nav>
 
-    <main class="container">
+    <a class="skip-link" href="#main">Langsung ke konten</a>
+
+    <header class="site-header">
+        <!-- KEEP IN SYNC: profil/galeri/music/talent/contact -->
+        <nav class="navbar" aria-label="Navigasi utama">
+            <div class="nav-container">
+                <span class="logo">KiyoEditz.</span>
+                <ul class="nav-links">
+                    <li><a href="profil.html">Profile</a></li>
+                    <li><a href="galeri.html">Galeri</a></li>
+                    <li><a href="music.html">Music</a></li>
+                    <li><a href="talent.html" class="active" aria-current="page">Talent</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container" id="main" tabindex="-1">
         <section class="talent-section fade-in">
             <h1 class="section-title">GitHub Statistics</h1>
             <p class="section-subtitle">Jejak kontribusi dan aktivitas pengembangan saya.</p>
@@ -33,15 +42,15 @@
 
                 <div class="stat-card glass-effect">
                     <a href="https://github.com/KiyoEditz" target="_blank" rel="noopener noreferrer">
-                        <img src="https://streak-stats.demolab.com/?user=KiyoEditz&theme=tokyonight&hide_border=true&background=00000000"
-                            alt="Streak Stats" loading="lazy">
+                        <img src="https://streak-stats.demolab.com/?user=KiyoEditz&amp;theme=tokyonight&amp;hide_border=true&amp;background=00000000"
+                            alt="Streak kontribusi GitHub KiyoEditz" loading="lazy">
                     </a>
                 </div>
 
                 <div class="stat-card glass-effect">
                     <a href="https://github.com/KiyoEditz" target="_blank" rel="noopener noreferrer">
-                        <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=KiyoEditz&theme=monokai"
-                            alt="Profile Summary" loading="lazy">
+                        <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=KiyoEditz&amp;theme=monokai"
+                            alt="Ringkasan profil GitHub KiyoEditz" loading="lazy">
                     </a>
                 </div>
 
@@ -55,7 +64,7 @@
             <div class="projects-grid">
 
                 <a class="project-card glass-effect" href="https://github.com/KiyoEditz/AIChat-With-Notebooks"
-                    target="_blank" rel="noopener noreferrer">
+                    target="_blank" rel="noopener noreferrer" data-repo="AIChat-With-Notebooks">
                     <div class="project-head">
                         <h3 class="project-name">AIChat With Notebooks</h3>
                         <span class="project-lang lang-javascript">JavaScript</span>
@@ -63,13 +72,18 @@
                     <p class="project-desc">Proyek AI chat yang dibangun di atas notebook — teman percakapan yang
                         ringan, mudah dijalankan, dan bisa dieksplorasi langsung dari sel notebook.</p>
                     <div class="project-meta">
-                        <span class="project-stars">&#9733; 33</span>
-                        <span class="project-arrow">&rarr;</span>
+                        <span class="project-stars" aria-label="40 bintang, 18 fork">
+                            <span aria-hidden="true">&#9733;</span>
+                            <span class="num" data-field="stars">40</span>
+                            <span aria-hidden="true">&middot;</span>
+                            <span class="num" data-field="forks">18</span>
+                        </span>
+                        <span class="project-arrow" aria-hidden="true">&rarr;</span>
                     </div>
                 </a>
 
                 <a class="project-card glass-effect" href="https://github.com/KiyoEditz/Elaina-MD" target="_blank"
-                    rel="noopener noreferrer">
+                    rel="noopener noreferrer" data-repo="Elaina-MD">
                     <div class="project-head">
                         <h3 class="project-name">Elaina MD</h3>
                         <span class="project-lang lang-javascript">JavaScript</span>
@@ -77,13 +91,18 @@
                     <p class="project-desc">Bot WhatsApp berbasis multi-device dengan beragam fitur, mulai dari
                         utilitas harian hingga automasi grup.</p>
                     <div class="project-meta">
-                        <span class="project-stars">&#9733; 39</span>
-                        <span class="project-arrow">&rarr;</span>
+                        <span class="project-stars" aria-label="41 bintang, 28 fork">
+                            <span aria-hidden="true">&#9733;</span>
+                            <span class="num" data-field="stars">41</span>
+                            <span aria-hidden="true">&middot;</span>
+                            <span class="num" data-field="forks">28</span>
+                        </span>
+                        <span class="project-arrow" aria-hidden="true">&rarr;</span>
                     </div>
                 </a>
 
                 <a class="project-card glass-effect" href="https://github.com/KiyoEditz/Project-Zero" target="_blank"
-                    rel="noopener noreferrer">
+                    rel="noopener noreferrer" data-repo="Project-Zero">
                     <div class="project-head">
                         <h3 class="project-name">Project Zero</h3>
                         <span class="project-lang lang-python">Python</span>
@@ -91,13 +110,18 @@
                     <p class="project-desc">Dataset dan model AI untuk Elaina, karakter dari Majo no Tabitabi. Dimulai
                         dari nol dengan satu tujuan: menjadikannya sebuah mahakarya.</p>
                     <div class="project-meta">
-                        <span class="project-stars">&#9733; 2</span>
-                        <span class="project-arrow">&rarr;</span>
+                        <span class="project-stars" aria-label="2 bintang, 0 fork">
+                            <span aria-hidden="true">&#9733;</span>
+                            <span class="num" data-field="stars">2</span>
+                            <span aria-hidden="true">&middot;</span>
+                            <span class="num" data-field="forks">0</span>
+                        </span>
+                        <span class="project-arrow" aria-hidden="true">&rarr;</span>
                     </div>
                 </a>
 
                 <a class="project-card glass-effect" href="https://github.com/KiyoEditz/Maestro" target="_blank"
-                    rel="noopener noreferrer">
+                    rel="noopener noreferrer" data-repo="Maestro">
                     <div class="project-head">
                         <h3 class="project-name">Maestro</h3>
                         <span class="project-lang lang-python">Python</span>
@@ -105,8 +129,13 @@
                     <p class="project-desc">Auto piano player dengan dukungan USB dan MIDI. Jalankan file MIDI apa pun
                         dan dengarkan seperti dimainkan pianis profesional.</p>
                     <div class="project-meta">
-                        <span class="project-stars">&#9733; 4</span>
-                        <span class="project-arrow">&rarr;</span>
+                        <span class="project-stars" aria-label="4 bintang, 0 fork">
+                            <span aria-hidden="true">&#9733;</span>
+                            <span class="num" data-field="stars">4</span>
+                            <span aria-hidden="true">&middot;</span>
+                            <span class="num" data-field="forks">0</span>
+                        </span>
+                        <span class="project-arrow" aria-hidden="true">&rarr;</span>
                     </div>
                 </a>
 
@@ -116,12 +145,16 @@
 
     <footer class="footer fade-in delay-2">
         <div class="social-links">
-            <a href="https://www.instagram.com/kiyoeditz" class="social-btn">Instagram</a>
-            <a href="https://www.facebook.com/profile.php?id=100077102250480&mibextid=ZbWKwL" class="social-btn">Facebook</a>
-            <a href="https://discord.com/users/813365850979041302" class="social-btn">Discord</a>
+            <a href="https://www.instagram.com/kiyoeditz" class="social-btn" target="_blank"
+                rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.facebook.com/profile.php?id=100077102250480&amp;mibextid=ZbWKwL"
+                class="social-btn" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://discord.com/users/813365850979041302" class="social-btn" target="_blank"
+                rel="noopener noreferrer">Discord</a>
         </div>
         <p>© 2026 KiyoTech Corp. All Rights Reserved.</p>
     </footer>
 
+    <script src="assets/js/talent.js" defer></script>
 </body>
 </html>

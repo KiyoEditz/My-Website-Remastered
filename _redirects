@@ -1,0 +1,11 @@
+# Redirect permanen dari nama file lama ke nama baru.
+# Wajib berada di root repo (root output Cloudflare Pages).
+/index1.html    /profil.html   301
+/index1         /profil.html   301
+
+# URL tanpa ekstensi -> file .html
+/profil        /profil.html   200
+/galeri        /galeri.html   200
+/music         /music.html    200
+/talent        /talent.html   200
+/contact       /contact.html  200

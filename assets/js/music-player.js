@@ -1,10 +1,21 @@
 // Gambar cadangan saat lagu tidak punya albumArt.
-// Sebelumnya menunjuk 'placeholder.jpg' yang tidak ada di repo -> gambar rusak.
-const FALLBACK_ART = 'thumbnail.jpg';
+const FALLBACK_ART = 'assets/img/brand/logo-160.webp';
 
 const NO_LYRICS_TEXT = 'Lirik tidak tersedia';
 
-// Pemutar ini khusus playlist internal (file lokal di folder music/).
+// Volume diingat antar kunjungan; 30% supaya pemutaran pertama tidak mengagetkan.
+const VOLUME_KEY = 'kiyo:volume';
+const MUTE_KEY = 'kiyo:muted';
+const DEFAULT_VOLUME = 30;
+
+// Setiap pemutaran naik dari 0 ke volume target selama ini. Tanpa ramp,
+// volume tersimpan 100% dari sesi lama tetap meledak begitu play ditekan.
+const FADE_MS = 700;
+
+// Ikon diambil dari sprite inline di music.html (menggantikan Font Awesome).
+const icon = (name) => `<svg class="icon" aria-hidden="true"><use href="#i-${name}" /></svg>`;
+
+// Pemutar ini khusus playlist internal (file lokal di assets/audio/).
 // Dukungan YouTube sudah dihapus: satu-satunya sumber audio adalah <audio>.
 class MusicPlayer {
     constructor() {
@@ -14,6 +25,8 @@ class MusicPlayer {
         this.nextBtn = document.getElementById('nextBtn');
         this.progressBar = document.getElementById('progressBar');
         this.volumeBar = document.getElementById('volumeBar');
+        this.volumeValue = document.getElementById('volumeValue');
+        this.muteBtn = document.getElementById('muteBtn');
         this.currentTimeDisplay = document.getElementById('currentTime');
         this.durationDisplay = document.getElementById('duration');
         this.songTitle = document.getElementById('songTitle');
@@ -25,9 +38,13 @@ class MusicPlayer {
         this.futureLyric = document.getElementById('futureLyric');
         this.playlistSelect = document.getElementById('playlistSelect');
         this.playlistTitle = document.getElementById('playlistTitle');
+        this.welcomePanel = document.getElementById('welcomePanel');
+        this.startButton = document.getElementById('startButton');
 
         this.currentSongIndex = 0;
         this.isPlaying = false;
+        this.targetVolume = DEFAULT_VOLUME / 100;
+        this.fadeFrame = null;
         this.allPlaylists = {};
         this.playlist = [];
         this.lyrics = [];
@@ -37,9 +54,10 @@ class MusicPlayer {
     }
 
     async init() {
+        this.setupWelcomePanel();
         await this.loadConfig();
         this.setupEventListeners();
-        this.setVolume();
+        this.restoreVolume();
         const defaultPlaylistName = (this.allPlaylists && (this.allPlaylists.defaultPlaylist || Object.keys(this.allPlaylists.playlists || {})[0]));
         if (defaultPlaylistName) {
             this.loadSpecificPlaylist(defaultPlaylistName);
@@ -48,9 +66,47 @@ class MusicPlayer {
         }
     }
 
+    // Dialog sambutan: kunci fokus di dalamnya sampai pengguna menekan tombol,
+    // lalu kembalikan fokus ke tombol putar. `inert` mencegah Tab keluar.
+    setupWelcomePanel() {
+        if (!this.welcomePanel || !this.startButton) return;
+
+        this.backgroundBlur?.setAttribute('aria-hidden', 'true');
+        this.setBackgroundInert(true);
+        this.startButton.focus();
+
+        this.startButton.addEventListener('click', () => this.dismissWelcome());
+        // Escape menutup panel. Aman: panel tidak pernah memutar audio.
+        this.welcomePanel.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape') return;
+            event.preventDefault();
+            this.dismissWelcome();
+        });
+    }
+
+    setBackgroundInert(isInert) {
+        const targets = [
+            document.querySelector('.site-header'),
+            document.getElementById('main')
+        ];
+        targets.forEach((el) => {
+            if (!el) return;
+            if (isInert) el.setAttribute('inert', '');
+            else el.removeAttribute('inert');
+        });
+    }
+
+    dismissWelcome() {
+        if (!this.welcomePanel || this.welcomePanel.classList.contains('hidden')) return;
+        this.welcomePanel.classList.add('hidden');
+        this.setBackgroundInert(false);
+        // Tanpa autoplay: pengguna menekan Putar sendiri saat sudah siap.
+        this.playPauseBtn.focus();
+    }
+
     async loadConfig() {
         try {
-            const response = await fetch('config.json');
+            const response = await fetch('assets/data/config.json');
             const config = await response.json();
             this.allPlaylists = config;
 
@@ -88,34 +144,22 @@ class MusicPlayer {
 
         this.progressBar.addEventListener('input', () => this.seek());
         this.volumeBar.addEventListener('input', () => this.setVolume());
+        this.muteBtn?.addEventListener('click', () => this.toggleMute());
 
         this.playlistSelect.addEventListener('change', (event) => {
             this.loadSpecificPlaylist(event.target.value);
         });
-
-        const startButton = document.getElementById('startButton');
-        const welcomePanel = document.getElementById('welcomePanel');
-
-        startButton.addEventListener('click', () => {
-            welcomePanel.classList.add('hidden');
-            this.startPlayback();
-        });
-
-        // Jaring pengaman: browser memblokir autoplay sampai ada interaksi,
-        // jadi klik pertama di mana pun ikut memicu pemutaran.
-        document.addEventListener('click', () => {
-            if (!this.isPlaying && welcomePanel.classList.contains('hidden')) {
-                this.startPlayback();
-            }
-        }, { once: true });
     }
 
-    startPlayback() {
-        this.audio.play().catch(() => {});
-        this.isPlaying = true;
-        this.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    // Tombol putar/jeda: ikon, label aksesibel, dan aria-pressed ikut berubah.
+    setPlayingState(isPlaying) {
+        this.isPlaying = isPlaying;
+        this.playPauseBtn.innerHTML = isPlaying ? icon('pause') : icon('play');
+        this.playPauseBtn.setAttribute('aria-label', isPlaying ? 'Jeda' : 'Putar');
+        this.playPauseBtn.setAttribute('aria-pressed', String(isPlaying));
     }
 
+    
     loadSpecificPlaylist(playlistName) {
         if (this.allPlaylists.playlists && this.allPlaylists.playlists[playlistName]) {
             this.playlist = this.allPlaylists.playlists[playlistName];
@@ -132,6 +176,7 @@ class MusicPlayer {
             this.songTitle.textContent = 'No songs in playlist';
             this.artist.textContent = '';
             this.albumArt.src = FALLBACK_ART;
+            this.albumArt.alt = 'Sampul album';
             this.audio.src = '';
             this.clearLyrics();
             return;
@@ -145,12 +190,13 @@ class MusicPlayer {
         this.songTitle.textContent = song.title || 'Unknown';
         this.artist.textContent = song.artist || '';
         this.albumArt.src = albumArt;
+        this.albumArt.alt = `Sampul album ${song.title || 'lagu'}`;
         this.backgroundBlur.style.backgroundImage = `url(${albumArt})`;
 
         if (song.lyricsPath) this.loadLyrics(song.lyricsPath);
         else this.clearLyrics();
 
-        if (this.isPlaying) this.audio.play().catch(() => {});
+        if (this.isPlaying) this.playWithFade();
     }
 
     clearLyrics() {
@@ -192,7 +238,8 @@ class MusicPlayer {
 
             // Tag metadata seperti [ti:...] / [ar:...] tidak akan cocok karena
             // grup pertama hanya menerima angka.
-            const text = line.slice(stamps[stamps.length - 1].index + stamps[stamps.length - 1][0].length).trim();
+            const last = stamps[stamps.length - 1];
+            const text = line.slice(last.index + last[0].length).trim();
 
             // Satu baris bisa punya beberapa timestamp (lirik berulang).
             stamps.forEach(stamp => {
@@ -232,15 +279,47 @@ class MusicPlayer {
         this.futureLyric.textContent = this.lyrics[this.currentLyricIndex + 2]?.text || '';
     }
 
+    // Satu-satunya jalur pemutaran. Volume selalu mulai dari 0 lalu naik,
+    // jadi tidak ada skenario yang bisa menghentak telinga.
+    playWithFade() {
+        this.cancelFade();
+        const target = this.audio.muted ? 0 : this.targetVolume;
+        this.audio.volume = 0;
+
+        const started = this.audio.play();
+        if (!started || typeof started.then !== 'function') {
+            this.audio.volume = target;
+            return;
+        }
+
+        started.then(() => {
+            const beganAt = performance.now();
+            const step = (now) => {
+                const progress = Math.min(1, (now - beganAt) / FADE_MS);
+                this.audio.volume = Math.min(target, target * progress);
+                this.fadeFrame = progress < 1 ? requestAnimationFrame(step) : null;
+            };
+            this.fadeFrame = requestAnimationFrame(step);
+        }).catch(() => {
+            // Autoplay diblokir atau file gagal dimuat; jangan biarkan volume 0.
+            this.audio.volume = target;
+        });
+    }
+
+    cancelFade() {
+        if (this.fadeFrame === null) return;
+        cancelAnimationFrame(this.fadeFrame);
+        this.fadeFrame = null;
+    }
+
     togglePlay() {
         if (this.isPlaying) {
+            this.cancelFade();
             this.audio.pause();
-            this.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-            this.isPlaying = false;
+            this.setPlayingState(false);
         } else {
-            this.audio.play().catch(() => {});
-            this.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            this.isPlaying = true;
+            this.playWithFade();
+            this.setPlayingState(true);
         }
     }
 
@@ -271,6 +350,11 @@ class MusicPlayer {
         const progress = (duration > 0) ? (currentTime / duration) * 100 : 0;
         this.progressBar.value = progress || 0;
         this.currentTimeDisplay.textContent = this.formatTime(currentTime);
+        // Pembaca layar menerima waktu yang bisa dibaca, bukan persen mentah.
+        this.progressBar.setAttribute(
+            'aria-valuetext',
+            `${this.formatTime(currentTime)} dari ${this.formatTime(duration)}`
+        );
         this.updateLyrics();
     }
 
@@ -284,9 +368,70 @@ class MusicPlayer {
         this.audio.currentTime = (this.progressBar.value / 100) * duration;
     }
 
-    setVolume() {
-        const val = parseInt(this.volumeBar.value, 10) || 0;
-        this.audio.volume = val / 100;
+    // Volume selalu di-clamp 0-100 dan disimpan, supaya reload berikutnya
+    // tidak kembali ke 100% (penyebab "jump scare" sebelumnya).
+    setVolume(persist = true) {
+        const val = Math.min(100, Math.max(0, parseInt(this.volumeBar.value, 10) || 0));
+        this.volumeBar.value = String(val);
+        // Ramp yang sedang berjalan akan menimpa nilai baru; hentikan dulu.
+        this.cancelFade();
+        // targetVolume adalah acuan playWithFade(). Tanpa ini, fade selalu
+        // naik ke 30% berapa pun posisi slider — memutar ulang setelah
+        // pengguna mengecilkan volume jadi lebih keras dari yang dipilih.
+        this.targetVolume = val / 100;
+        this.audio.volume = this.targetVolume;
+        this.updateVolumeLabel(val);
+        if (persist) {
+            try { localStorage.setItem(VOLUME_KEY, String(val)); } catch (error) { /* mode privat */ }
+        }
+    }
+
+    // Urutan prioritas: volume terakhir yang dipilih pengguna, lalu
+    // DEFAULT_VOLUME (30%). Tidak pernah jatuh ke 100%.
+    // Status bisu ikut diingat: kalau pengguna sudah membisukan, reload
+    // berikutnya tetap sunyi, bukan tiba-tiba bersuara.
+    restoreVolume() {
+        let stored = null;
+        let storedMute = null;
+        try {
+            stored = localStorage.getItem(VOLUME_KEY);
+            storedMute = localStorage.getItem(MUTE_KEY);
+        } catch (error) {
+            stored = null;
+        }
+        const parsed = parseInt(stored, 10);
+        this.volumeBar.value = String(
+            Number.isFinite(parsed)
+                ? Math.min(100, Math.max(0, parsed))
+                : DEFAULT_VOLUME
+        );
+        this.audio.muted = storedMute === 'true';
+        this.syncMuteUI();
+        this.setVolume(false);
+    }
+
+    // Ikon, label, dan aria-pressed tombol bisu selalu berasal dari satu
+    // sumber: nilai audio.muted.
+    syncMuteUI() {
+        if (!this.muteBtn) return;
+        this.muteBtn.innerHTML = icon(this.audio.muted ? 'volume-mute' : 'volume');
+        this.muteBtn.setAttribute('aria-label', this.audio.muted ? 'Nyalakan suara' : 'Bisukan');
+        this.muteBtn.setAttribute('aria-pressed', String(this.audio.muted));
+    }
+
+    // Saat dibisukan, nilai slider tetap berlaku tapi labelnya diberi keterangan.
+    updateVolumeLabel(val) {
+        const suffix = this.audio.muted ? ' (dibisukan)' : '';
+        this.volumeBar.setAttribute('aria-valuetext', `${val}%${suffix}`);
+        if (this.volumeValue) this.volumeValue.textContent = `${val}%`;
+    }
+
+    toggleMute() {
+        this.audio.muted = !this.audio.muted;
+        this.syncMuteUI();
+        try { localStorage.setItem(MUTE_KEY, String(this.audio.muted)); } catch (error) { /* mode privat */ }
+        // Volume slider tetap berlaku; yang berubah hanya gerbang mute.
+        this.setVolume(false);
     }
 
     formatTime(seconds) {

@@ -1,28 +1,121 @@
 /* ========================================= */
 /* DESIGN TOKENS: Luminous Tech-Pop          */
 /* ========================================= */
-/* Sumber tunggal palet warna untuk seluruh  */
-/* proyek. Spesifikasi lengkap: pallet.md    */
-/* Diimpor oleh style.css & style1.css.      */
-/* Jangan menyalin ulang blok ini di file    */
-/* lain - ubah di sini saja.                 */
+/* Sumber tunggal untuk warna, radius, spasi, */
+/* tipografi, dan motion. Ditautkan langsung  */
+/* lewat <link> di setiap halaman SEBELUM     */
+/* stylesheet lain - jangan pakai @import.    */
+/* Jangan menyalin ulang blok ini di file     */
+/* lain - ubah di sini saja.                  */
 
 :root {
-    /* Backgrounds */
+    /* --- Warna dasar --- */
     --bg-base: #F8FAFC;
     --surface: #FFFFFF;
-
-    /* Brand & Accents */
     --primary: #6366F1;
     --primary-hover: #4F46E5;
     --accent-energy: #EC4899;
     --accent-fresh: #06B6D4;
 
-    /* Typography */
+    /* Teks */
     --text-main: #0F172A;
     --text-muted: #64748B;
+    /* Primary versi aman-untuk-teks: #6366F1 di atas #F8FAFC
+       hanya ~4.2:1, gagal WCAG AA untuk teks kecil. */
+    --text-link: #4F46E5;
+    --text-on-primary: #FFFFFF;
 
-    /* Utilities */
-    --shadow-card: 0 20px 40px rgba(15, 23, 42, 0.08);
-    --shadow-button: 0 10px 25px rgba(99, 102, 241, 0.4);
+    /* --- Kanal RGB (tanpa koma, agar bisa diberi alpha) --- */
+    --primary-rgb: 99 102 241;
+    --energy-rgb: 236 72 153;
+    --fresh-rgb: 6 182 212;
+    --ink-rgb: 15 23 42;
+    --white-rgb: 255 255 255;
+
+    /* --- Alpha semantik turunan --- */
+    --primary-a05: rgb(var(--primary-rgb) / .05);
+    --primary-a10: rgb(var(--primary-rgb) / .10);
+    --primary-a12: rgb(var(--primary-rgb) / .12);
+    --primary-a20: rgb(var(--primary-rgb) / .20);
+    --primary-a30: rgb(var(--primary-rgb) / .30);
+    --primary-a40: rgb(var(--primary-rgb) / .40);
+
+    --energy-a05: rgb(var(--energy-rgb) / .05);
+    --energy-a10: rgb(var(--energy-rgb) / .10);
+    --energy-a15: rgb(var(--energy-rgb) / .15);
+    --energy-a20: rgb(var(--energy-rgb) / .20);
+
+    --fresh-a10: rgb(var(--fresh-rgb) / .10);
+
+    --ink-a03: rgb(var(--ink-rgb) / .03);
+    --ink-a08: rgb(var(--ink-rgb) / .08);
+
+    /* Permukaan kaca */
+    --glass-bg: rgb(var(--white-rgb) / .80);
+    --glass-bg-strong: rgb(var(--white-rgb) / .90);
+    --glass-border: rgb(var(--ink-rgb) / .06);
+
+    /* Scrim foto (caption di atas gambar) */
+    --scrim: linear-gradient(to top, rgb(0 0 0 / .85) 0%, rgb(0 0 0 / 0) 100%);
+
+    /* --- Bayangan --- */
+    --shadow-card: 0 20px 40px rgb(var(--ink-rgb) / .08);
+    --shadow-card-hover: 0 25px 50px rgb(var(--ink-rgb) / .12);
+    --shadow-button: 0 10px 25px rgb(var(--primary-rgb) / .40);
+    --shadow-button-hover: 0 15px 30px rgb(var(--primary-rgb) / .50);
+    --shadow-pop: 0 4px 15px rgb(var(--primary-rgb) / .15);
+    --shadow-media: 0 4px 20px rgb(0 0 0 / .15);
+    --shadow-media-sm: 0 4px 10px rgb(0 0 0 / .20);
+
+    /* --- Radius (menggantikan 8/12/14/16/20/24/30/50/999) --- */
+    --radius-xs: 8px;
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --radius-pill: 999px;
+    --radius-circle: 50%;
+
+    /* --- Spasi (basis 4px) --- */
+    --space-1: .25rem;
+    --space-2: .5rem;
+    --space-3: .75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+
+    /* --- Tipografi --- */
+    /* Fallback Jepang ditulis eksplisit: Inter tidak punya glyph CJK,
+       dan beberapa judul lagu memakai aksara Jepang. */
+    --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', Meiryo, sans-serif;
+    --fs-xs: .8125rem;
+    --fs-sm: .875rem;
+    --fs-base: 1rem;
+    --fs-md: clamp(1.0625rem, .98rem + .4vw, 1.15rem);
+    --fs-lg: clamp(1.25rem, 1.1rem + .75vw, 1.5rem);
+    --fs-xl: clamp(1.5rem, 1.25rem + 1.25vw, 2rem);
+    --fs-2xl: clamp(1.75rem, 1.35rem + 2vw, 2.5rem);
+    --fs-3xl: clamp(2rem, 1.5rem + 3vw, 3rem);
+    --lh-tight: 1.2;
+    --lh-base: 1.6;
+
+    /* --- Layout --- */
+    --container-max: 800px;
+    /* Hanya halaman galeri: cukup untuk 4 kolom masonry. */
+    --container-max-wide: 1200px;
+    --container-pad: clamp(1rem, 4vw, 2rem);
+
+    /* --- Motion --- */
+    --ease-out: cubic-bezier(.2, .8, .2, 1);
+    --dur-fast: 150ms;
+    --dur-base: 250ms;
+    --dur-slow: 400ms;
+
+    /* --- Z-index --- */
+    --z-bg: -1;
+    --z-nav: 100;
+    --z-overlay: 1000;
 }

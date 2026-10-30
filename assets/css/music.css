@@ -9,66 +9,75 @@
     left: -10%;
     width: 120%;
     height: 120%;
-    z-index: -1;
+    z-index: var(--z-bg);
     background-size: cover;
     background-position: center;
-    /* Blur diperbesar agar tidak mengganggu keterbacaan teks */
     filter: blur(40px) brightness(1.1);
     opacity: 0.3;
-    /* Transparansi rendah agar gradien utama tetap dominan */
-    transition: background-image 0.5s ease-in-out;
+    transition: background-image var(--dur-slow) ease-in-out;
 }
 
 /* --- Welcome Panel (Glass Modal) --- */
 .welcome-panel {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.3);
-    /* Overlay terang */
+    inset: 0; /* menutup viewport termasuk area toolbar mobile */
+    background-color: rgb(var(--white-rgb) / .30);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
+    /* Di ponsel landscape (tinggi ~360px) panel lebih tinggi dari layar;
+       tanpa padding + scroll, judul dan tombol "Buka Pemutar" terpotong. */
+    padding: var(--space-4);
+    overflow-y: auto;
+    z-index: var(--z-overlay);
+    transition: opacity var(--dur-slow) ease, visibility var(--dur-slow) ease;
 }
 
+/* `visibility` berubah di akhir transisi, jadi panel yang sudah "hidden"
+   masih bisa menangkap klik selama ~400 ms dan menelan klik pertama pada
+   tombol Putar. pointer-events: none mematikan itu seketika. */
 .welcome-panel.hidden {
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
+}
+
+/* Latar tidak bisa di-scroll selama dialog sambutan terbuka. */
+body:has(#welcomePanel:not(.hidden)) {
+    overflow: hidden;
 }
 
 .welcome-content {
     text-align: center;
-    padding: 3rem;
-    border-radius: 24px;
+    padding: var(--space-12);
+    border-radius: var(--radius-xl);
     max-width: 400px;
+    /* margin:auto (bukan align-items saja) supaya panel bisa di-scroll
+       dari atas ketika isinya lebih tinggi dari viewport. */
+    margin: auto;
 }
 
 .welcome-content h2 {
-    font-size: 1.5rem;
+    font-size: var(--fs-lg);
     color: var(--text-main);
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--space-2);
 }
 
 .welcome-content p {
     color: var(--text-muted);
-    margin-bottom: 2rem;
-    font-size: 0.95rem;
+    margin-bottom: var(--space-8);
+    font-size: var(--fs-sm);
 }
 
 /* --- Player Utama --- */
 .player-container {
-    padding: 2.5rem;
-    border-radius: 24px;
-    margin-top: 1rem;
-    max-width: 850px;
-    width: 800px;
+    padding: var(--space-10);
+    border-radius: var(--radius-xl);
+    margin-top: var(--space-4);
+    width: 100%;
     min-height: 520px;
-    /* Membuat kontainer lebih statis */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -76,32 +85,54 @@
 
 .player-header {
     display: flex;
+    flex-wrap: wrap; /* judul + select turun baris di 768-900px */
+    gap: var(--space-4);
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
-    border-bottom: 2px dashed rgba(99, 102, 241, 0.2);
-    padding-bottom: 1.5rem;
+    margin-bottom: var(--space-8);
+    border-bottom: 2px dashed var(--primary-a20);
+    padding-bottom: var(--space-6);
 }
 
 .header-title-wrapper {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-3);
 }
 
 .header-icon {
     font-size: 1.5rem;
     color: var(--accent-energy);
-    background: rgba(236, 72, 153, 0.15);
-    padding: 12px;
-    border-radius: 14px;
-    box-shadow: 0 4px 10px rgba(236, 72, 153, 0.2);
+    background: var(--energy-a15);
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-pop);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Ikon headphone di dialog sambutan (dulu inline style + warna di luar palet) */
+.welcome-icon {
+    display: block;
+    margin: 0 auto var(--space-4);
+    font-size: 3rem;
+    color: var(--primary);
+}
+
+/* Dulu inline style pada h1#playlistTitle */
+.playlist-title {
+    font-size: var(--fs-xl);
+    margin: 0;
 }
 
 .select-wrapper {
     position: relative;
     display: flex;
     align-items: center;
+    min-width: 0;
+    max-width: 100%;
 }
 
 .select-icon {
@@ -115,36 +146,41 @@
 .custom-pill-select {
     appearance: none;
     -webkit-appearance: none;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgb(var(--white-rgb) / .85);
     border: 2px solid transparent;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), linear-gradient(135deg, var(--primary) 0%, var(--accent-energy) 100%);
+    background-image: linear-gradient(var(--glass-bg-strong), var(--glass-bg-strong)),
+        linear-gradient(135deg, var(--primary) 0%, var(--accent-energy) 100%);
     background-origin: border-box;
     background-clip: padding-box, border-box;
     color: var(--primary-hover);
     padding: 0.7rem 2.8rem 0.7rem 2.8rem;
-    border-radius: 50px;
-    font-family: 'Inter', sans-serif;
+    border-radius: var(--radius-pill);
+    font-family: inherit;
     font-weight: 700;
-    font-size: 0.95rem;
-    outline: none;
+    font-size: var(--fs-sm);
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);
-    transition: all 0.3s ease;
+    box-shadow: var(--shadow-pop);
+    max-width: 260px;
+    transition: box-shadow var(--dur-base) ease, transform var(--dur-base) ease;
 }
 
-.custom-pill-select:hover {
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
-    transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+    .custom-pill-select:hover {
+        box-shadow: 0 6px 20px var(--primary-a30);
+        transform: translateY(-2px);
+    }
 }
 
+/* Chevron digambar dengan CSS, bukan glyph Font Awesome
+   (sebelumnya memakai family FA 5 padahal yang dimuat FA 6). */
 .select-wrapper::after {
-    content: '\f107';
-    /* FontAwesome down arrow */
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
+    content: "";
     position: absolute;
     right: 18px;
-    color: var(--primary);
+    width: 10px;
+    height: 6px;
+    background: var(--primary);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
     pointer-events: none;
 }
 
@@ -152,16 +188,16 @@
 .player-layout {
     display: grid;
     grid-template-columns: 300px 1fr;
-    gap: 2.5rem;
+    gap: var(--space-10);
     align-items: center;
 }
 
 /* --- Album Art --- */
 .album-art-wrapper {
     width: 100%;
-    border-radius: 20px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgb(0 0 0 / .10);
 }
 
 .album-art-wrapper img {
@@ -172,33 +208,42 @@
 }
 
 /* --- Informasi Lagu --- */
+/* Kolom kanan pemutar: satu flex column dengan gap seragam.
+   Sebelumnya ini blok biasa tanpa aturan apa pun, jadi jarak antar
+   bagian bergantung pada margin masing-masing (dan saling menempel). */
+.player-controls-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    min-width: 0; /* agar slider di dalamnya boleh menyusut */
+}
+
 .player-info {
-    margin-bottom: 1rem;
+    margin-bottom: 0;
 }
 
 .player-info h2 {
-    font-size: 1.8rem;
+    font-size: var(--fs-xl);
     color: var(--text-main);
     font-weight: 700;
-    margin-bottom: 0.2rem;
+    margin-bottom: var(--space-1);
     letter-spacing: -0.5px;
+    line-height: var(--lh-tight);
+    overflow-wrap: anywhere; /* judul Jepang panjang tidak menembus kolom */
 }
 
 .player-info p {
-    color: var(--primary);
-    font-size: 1rem;
+    color: var(--text-link);
+    font-size: var(--fs-base);
     font-weight: 500;
 }
-
-/* --- Source Badge dihapus bersama dukungan YouTube: sekarang semua lagu
-   berasal dari playlist internal, jadi penanda sumber tidak lagi berguna. --- */
 
 .progress-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    margin-bottom: 1rem;
+    gap: var(--space-4);
+    margin-bottom: 0;
     width: 100%;
 }
 
@@ -206,35 +251,73 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: var(--space-3);
     width: 100%;
     max-width: 360px;
+    min-width: 0;
+    /* Sejajar dengan tombol kontrol di atasnya, bukan menempel ke kiri. */
+    margin-inline: auto;
+}
+
+/* Tombol mute memakai gaya .control-btn, tapi ukurannya tetap
+   supaya sejajar dengan slider volume. */
+.volume-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--text-muted);
+    font-size: 1.25rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: color var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .volume-btn:hover {
+        color: var(--text-link);
+        transform: scale(1.1);
+    }
 }
 
 .progress-container span {
-    font-size: 0.85rem;
+    font-size: var(--fs-sm);
     color: var(--text-muted);
     font-variant-numeric: tabular-nums;
     min-width: 45px;
-    /* Mengunci lebar teks agar slider TIDAK bergeser/miring */
     text-align: center;
 }
 
-.volume-container i {
+.volume-container .icon {
     color: var(--text-muted);
     width: 20px;
-    /* Mengunci lebar ikon */
     text-align: center;
+    flex-shrink: 0;
 }
 
-/* Styling Range Slider */
+/* Label persen di ujung slider volume. Lebarnya dikunci supaya
+   angka 9% -> 100% tidak menggeser slider saat digeser. */
+.volume-value {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    min-width: 3.5ch;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+/* --- Styling Range Slider (WebKit + Firefox) --- */
 input[type="range"] {
     flex: 1;
+    min-width: 0; /* tanpa ini slider menolak menyusut dan mendorong label keluar */
     height: 6px;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    outline: none;
+    background: var(--ink-a08);
+    border-radius: var(--radius-pill);
+    appearance: none;
     -webkit-appearance: none;
+    cursor: pointer;
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -242,9 +325,10 @@ input[type="range"]::-webkit-slider-thumb {
     width: 14px;
     height: 14px;
     background: var(--primary);
-    border-radius: 50%;
+    border: none;
+    border-radius: var(--radius-circle);
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 2px 5px var(--primary-a40);
     transition: transform 0.1s;
 }
 
@@ -252,15 +336,34 @@ input[type="range"]::-webkit-slider-thumb:hover {
     transform: scale(1.2);
 }
 
+input[type="range"]::-moz-range-track {
+    height: 6px;
+    background: var(--ink-a08);
+    border-radius: var(--radius-pill);
+}
+
+input[type="range"]::-moz-range-progress {
+    height: 6px;
+    background: var(--primary);
+    border-radius: var(--radius-pill);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border: none;
+    background: var(--primary);
+    border-radius: var(--radius-circle);
+    cursor: pointer;
+}
+
 /* --- Tombol Kontrol --- */
 .controls {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1.5rem;
-    /* Dibuat lebih rapat agar compact */
-    flex: 1;
-    /* Mengisi ruang tengah */
+    gap: var(--space-6);
+    width: 100%;
 }
 
 .control-btn {
@@ -269,40 +372,46 @@ input[type="range"]::-webkit-slider-thumb:hover {
     color: var(--text-muted);
     font-size: 1.5rem;
     cursor: pointer;
-    transition: color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--dur-fast) ease, transform var(--dur-fast) ease;
 }
 
-.control-btn:hover {
-    color: var(--primary);
-    transform: scale(1.1);
+@media (hover: hover) and (pointer: fine) {
+    .control-btn:hover {
+        color: var(--text-link);
+        transform: scale(1.1);
+    }
 }
 
 /* Tombol Play Besar */
 .play-btn {
     background: linear-gradient(135deg, var(--primary) 0%, var(--accent-fresh) 100%);
-    color: white;
+    color: var(--text-on-primary);
     width: 50px;
-    /* Dikecilkan sedikit agar kompak */
     height: 50px;
-    border-radius: 50%;
+    border-radius: var(--radius-circle);
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 15px var(--primary-a30);
 }
 
-.play-btn:hover {
-    color: white;
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+@media (hover: hover) and (pointer: fine) {
+    .play-btn:hover {
+        color: var(--text-on-primary);
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px var(--primary-a40);
+    }
 }
 
 /* --- Area Lirik --- */
 .lyrics-container {
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 12px;
-    padding: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgb(var(--white-rgb) / .50);
+    border-radius: var(--radius-sm);
+    padding: var(--space-6);
+    border: 1px solid rgb(var(--white-rgb) / .60);
 }
 
 .lyrics-scroll {
@@ -310,42 +419,40 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .lyrics-scroll p {
-    margin: 0.5rem 0;
-    transition: color 0.3s ease, font-size 0.3s ease;
+    margin: var(--space-2) 0;
+    overflow-wrap: anywhere;
+    transition: color var(--dur-base) ease, font-size var(--dur-base) ease;
 }
 
 .active-lyric {
-    font-size: 1.15rem;
+    font-size: var(--fs-md);
     font-weight: 600;
-    color: var(--primary);
-    /* Warna saat lirik dinyanyikan */
+    color: var(--text-link);
 }
 
 .upcoming-lyric {
-    font-size: 0.95rem;
+    font-size: var(--fs-sm);
     color: var(--text-muted);
 }
 
 /* --- Responsive untuk Mobile --- */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .welcome-content {
-        padding: 2rem 1.5rem;
+        padding: var(--space-8) var(--space-6);
         width: 90%;
         max-width: 90%;
     }
 
     .player-container {
-        padding: 1.5rem;
+        padding: var(--space-6);
         margin: 0;
-        width: 100%;
         max-width: 100%;
         min-height: auto;
-        box-sizing: border-box;
     }
 
     .player-layout {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: var(--space-6);
     }
 
     .album-art-wrapper {
@@ -357,12 +464,12 @@ input[type="range"]::-webkit-slider-thumb:hover {
         max-width: 250px;
         height: auto;
         aspect-ratio: 1 / 1;
-        border-radius: 16px;
+        border-radius: var(--radius-md);
     }
 
     .player-header {
         flex-direction: column;
-        gap: 1rem;
+        gap: var(--space-4);
         text-align: center;
     }
 
@@ -385,7 +492,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     }
 
     .player-info h2 {
-        font-size: 1.5rem;
+        font-size: var(--fs-lg);
     }
 
     .volume-container {
@@ -394,7 +501,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     }
 
     .controls {
-        gap: 1.5rem;
+        gap: var(--space-6);
         width: 100%;
         justify-content: center;
     }

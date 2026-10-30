@@ -3,9 +3,10 @@
 # Abaikan isi .claude (settings lokal), tapi definisi subagent tetap dilacak.
 # Catatan: harus '.claude/*' bukan '.claude/', karena git tidak masuk ke
 # direktori yang sudah dikecualikan sehingga negasi '!' tidak akan berlaku.
-.claude/*
+.claude
 !.claude/agents/
 .idea/
+scratch
 *.suo
 *.ntvs*
 *.njsproj
@@ -31,7 +32,9 @@ pnpm-debug.log*
 # Logs
 logs
 *.log
-error.txt
-# Design resources
-example.html
-pallet.md
+
+# Berkas kerja lokal: tidak pernah ikut deploy ke Cloudflare Pages.
+# Cloudflare mempublikasikan SELURUH isi repo, jadi folder ini wajib di-ignore.
+_dev/
+# Screenshot referensi / eksperimen lokal.
+scratch/
